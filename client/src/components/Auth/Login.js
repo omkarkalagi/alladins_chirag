@@ -1,10 +1,36 @@
-// client/src/components/Auth/Login.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
-  // ... existing state and logic ...
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [method, setMethod] = useState('email');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login, sendOtp } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    
+    try {
+      if (method === 'email') {
+        await login(email, password);
+        navigate('/dashboard');
+      } else {
+        await sendOtp(phone);
+        navigate('/verify-otp', { state: { phone } });
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || `Failed to log in with ${method}`);
+    }
+    
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100 p-4">
@@ -52,7 +78,73 @@ const Login = () => {
             </button>
           </div>
           
-          {/* Rest of your form */}
+          {error && (
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              {error}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit}>
+            {method === 'email' ? (
+              <>
+                <div className="mb-5">
+                  <label htmlFor="email" className="block text-gray-700 mb-2 font-medium">Email</label>
+                  <input
+                    type="email" id="email"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="password" className="block text-gray-700 mb-2 font-medium">Password</label>
+                  <input
+                    type="password" id="password"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    required
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="mb-5">
+                <label htmlFor="phone" className="block text-gray-700 mb-2 font-medium">Mobile Number</label>
+                <input
+                  type="tel" id="phone"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your mobile number" 
+                  value={phone} 
+                  onChange={(e) => setPhone(e.target.value)} 
+                  required
+                />
+              </div>
+            )}
+            
+            <button
+              type="submit" 
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 rounded-lg hover:opacity-90 transition duration-300 font-bold shadow-md disabled:opacity-70"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <i className="fas fa-spinner fa-spin mr-2"></i> Loading...
+                </span>
+              ) : method === 'email' ? 'Login' : 'Send OTP'}
+            </button>
+          </form>
+          
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">
+              Don't have an account? <Link to="/signup" className="text-blue-600 font-medium hover:underline">Sign up</Link>
+            </p>
+            <Link to="/forgot-password" className="text-blue-600 text-sm mt-2 inline-block hover:underline">
+              Forgot password?
+            </Link>
+          </div>
         </div>
       </div>
     </div>

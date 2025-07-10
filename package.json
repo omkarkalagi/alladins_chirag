@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@jridgewell/sourcemap-codec": "^1.5.4",
+    "@rollup/plugin-terser": "^0.4.4",
+    "lru-cache": "^11.1.0"
+  }
+}

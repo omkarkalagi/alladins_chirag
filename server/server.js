@@ -116,3 +116,8 @@ function getStockName(symbol) {
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// server/server.js
+const aiRoutes = require('./routes/aiRoutes');
+
+// After other routes
+app.use('/api/ai', aiRoutes);

@@ -90,7 +90,8 @@ const Login = () => {
                 <div className="mb-5">
                   <label htmlFor="email" className="block text-gray-700 mb-2 font-medium">Email</label>
                   <input
-                    type="email" id="email"
+                    type="email" 
+                    id="email"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter your email" 
                     value={email} 
@@ -101,7 +102,8 @@ const Login = () => {
                 <div className="mb-6">
                   <label htmlFor="password" className="block text-gray-700 mb-2 font-medium">Password</label>
                   <input
-                    type="password" id="password"
+                    type="password" 
+                    id="password"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter your password" 
                     value={password} 
@@ -114,7 +116,8 @@ const Login = () => {
               <div className="mb-5">
                 <label htmlFor="phone" className="block text-gray-700 mb-2 font-medium">Mobile Number</label>
                 <input
-                  type="tel" id="phone"
+                  type="tel" 
+                  id="phone"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter your mobile number" 
                   value={phone} 

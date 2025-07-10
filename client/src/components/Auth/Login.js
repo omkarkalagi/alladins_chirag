@@ -1,130 +1,58 @@
+// client/src/components/Auth/Login.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [method, setMethod] = useState('email'); // 'email' or 'phone'
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    
-    try {
-      if (method === 'email') {
-        await login(email, password);
-      } else {
-        // For phone, navigate to OTP verification
-        navigate('/verify-otp', { state: { phone } });
-        return;
-      }
-      
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Failed to log in');
-      console.error(err);
-    }
-    
-    setLoading(false);
-  };
+  // ... existing state and logic ...
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6">
-          <div className="flex items-center justify-center mb-4">
-            <div className="bg-white p-2 rounded-full">
-              <div className="bg-blue-600 w-12 h-12 rounded-full flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100 p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all hover:shadow-2xl">
+        {/* Animated gradient header */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
+          
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="bg-white p-2 rounded-full shadow-lg mb-4">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 w-16 h-16 rounded-full flex items-center justify-center">
                 <span className="text-white text-2xl font-bold">AC</span>
               </div>
             </div>
+            <h2 className="text-3xl font-bold text-white text-center">Alladin's Chirag</h2>
+            <p className="text-blue-200 text-center mt-1">Kalagi Group of Companies</p>
           </div>
-          <h2 className="text-2xl font-bold text-white text-center">Alladin's Chirag</h2>
-          <p className="text-blue-200 text-center">Kalagi Group of Companies</p>
         </div>
         
-        <div className="p-8">
-          <div className="flex border-b mb-6">
+        {/* Glowing form container */}
+        <div className="p-8 relative bg-white rounded-t-2xl -mt-6 z-20 shadow-lg">
+          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-indigo-600 rounded-full blur-xl opacity-20"></div>
+          
+          {/* Login method tabs */}
+          <div className="flex border-b border-gray-200 mb-6">
             <button
-              className={`py-2 px-4 font-medium ${method === 'email' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-500'}`}
+              className={`flex-1 py-3 font-medium text-center transition-colors ${
+                method === 'email' 
+                  ? 'text-blue-600 border-b-2 border-blue-600' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
               onClick={() => setMethod('email')}
             >
-              Email Login
+              <i className="fas fa-envelope mr-2"></i>Email Login
             </button>
             <button
-              className={`py-2 px-4 font-medium ${method === 'phone' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-500'}`}
+              className={`flex-1 py-3 font-medium text-center transition-colors ${
+                method === 'phone' 
+                  ? 'text-blue-600 border-b-2 border-blue-600' 
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
               onClick={() => setMethod('phone')}
             >
-              Mobile Login
+              <i className="fas fa-mobile-alt mr-2"></i>Mobile Login
             </button>
           </div>
           
-          {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
-          
-          <form onSubmit={handleSubmit}>
-            {method === 'email' ? (
-              <>
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="password" className="block text-gray-700 mb-2">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              </>
-            ) : (
-              <div className="mb-4">
-                <label htmlFor="phone" className="block text-gray-700 mb-2">Mobile Number</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your mobile number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  required
-                />
-              </div>
-            )}
-            
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-2 rounded-md hover:from-blue-700 hover:to-indigo-800 transition duration-300 font-medium"
-            >
-              {method === 'email' ? 'Login' : 'Send OTP'}
-            </button>
-          </form>
-          
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline">Sign up</Link>
-            </p>
-          </div>
+          {/* Rest of your form */}
         </div>
       </div>
     </div>
@@ -132,16 +60,3 @@ const Login = () => {
 };
 
 export default Login;
-// client/src/components/Auth/Login.js
-<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-  <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
-    <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6">
-      {/* Header content */}
-    </div>
-    
-    {/* Add shadow and rounded corners to form */}
-    <div className="p-6 rounded-lg bg-white shadow-sm">
-      {/* Form content */}
-    </div>
-  </div>
-</div>

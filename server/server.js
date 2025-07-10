@@ -25,12 +25,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Database Connection
+// Use new MongoDB connection method
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
-
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000
+})
+.then(() => console.log('MongoDB Connected'))
+.catch(err => {
+  console.error('MongoDB Connection Error:', err);
+  process.exit(1);
+});
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const stockRoutes = require('./routes/stockRoutes');

@@ -132,3 +132,16 @@ const Login = () => {
 };
 
 export default Login;
+// client/src/components/Auth/Login.js
+<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+  <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6">
+      {/* Header content */}
+    </div>
+    
+    {/* Add shadow and rounded corners to form */}
+    <div className="p-6 rounded-lg bg-white shadow-sm">
+      {/* Form content */}
+    </div>
+  </div>
+</div>

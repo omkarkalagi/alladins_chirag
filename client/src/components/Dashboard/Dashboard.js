@@ -24,3 +24,5 @@ const [selectedStock, setSelectedStock] = useState(null);
     <AutoTradePanel stock={selectedStock} />
   </div>
 )}
+- export function Dashboard() { ... }
++ export default function Dashboard() { ... }

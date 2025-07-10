@@ -12,3 +12,8 @@ root.render(
     </AuthProvider>
   </React.StrictMode>
 );
+// Add this at the very top to force CSS import
+import './tailwind.output.css';
+import './index.css';
+
+// Rest of the file remains the same

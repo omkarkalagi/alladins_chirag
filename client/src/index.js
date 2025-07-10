@@ -16,7 +16,7 @@ import './tailwind.output.css';
 import App from './App';
 
 // 5. Local Utilities/Services
-import reportWebVitals from './reportWebVitals';
+//import reportWebVitals from './reportWebVitals';
 import store from './app/store';
 
 // 6. Code execution comes LAST
@@ -31,4 +31,4 @@ root.render(
   </React.StrictMode>
 );
 
-reportWebVitals();
+//reportWebVitals();

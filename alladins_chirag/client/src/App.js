@@ -6,7 +6,7 @@ import Signup from './components/Auth/Signup';
 import OTPVerification from './components/Auth/OTPVerification';
 import Dashboard from './components/Dashboard/Dashboard';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import 'alladins_chirag./App.css';
+import './App.css'; // Corrected path
 
 const socket = io(process.env.REACT_APP_BACKEND_URL);
 

@@ -1,7 +1,7 @@
 // client/src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './App.css';
+import '.alladins_chirag/App.css';
 import App from './App';
 import { AuthProvider } from './context/AuthContext';
 

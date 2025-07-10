@@ -34,16 +34,18 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const stockRoutes = require('./routes/stockRoutes');
+const portfolioRoutes = require('./routes/portfolioRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/stocks', stockRoutes);
+app.use('/api/portfolio', portfolioRoutes);
 
 // WebSocket for real-time data
 io.on('connection', (socket) => {
   console.log('New client connected');
   
   // Send market data updates every 5 seconds
-  setInterval(async () => {
+  const marketInterval = setInterval(async () => {
     try {
       // In production, replace with real API calls
       const mockData = await generateMockMarketData();
@@ -55,13 +57,14 @@ io.on('connection', (socket) => {
   
   socket.on('disconnect', () => {
     console.log('Client disconnected');
+    clearInterval(marketInterval);
   });
 });
 
 // Generate mock market data
 async function generateMockMarketData() {
   const nifty50Stocks = ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'HINDUNILVR', 
-                         'ICICIBANK', 'KOTAKBANK', 'SBIN', 'BHARTIARTL', 'LT'];
+                        'ICICIBANK', 'KOTAKBANK', 'SBIN', 'BHARTIARTL', 'LT'];
   
   const stocks = [];
   

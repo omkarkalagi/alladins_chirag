@@ -17,6 +17,9 @@
     "web-vitals": "^3.5.0"
   },
   "scripts": {
+    "build:css": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.output.css",
+    "prestart": "npm run build:css",
+    "prebuild": "npm run build:css",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -41,9 +44,9 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.1",
     "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38"
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1"
   },
   "resolutions": {
     "glob": "^9.0.0",
@@ -56,25 +59,4 @@
     "inflight": "^1.0.7",
     "domexception": "^4.0.0"
   }
-}
-{
-  "scripts": {
-    "build:css": "tailwindcss build src/index.css -o src/tailwind.output.css",
-    "prebuild": "npm run build:css",
-    "start": "npm run build:css && react-scripts start",
-    "build": "npm run build:css && react-scripts build"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "postcss-cli": "^10.1.0",
-    "tailwindcss": "^3.4.1"
-  }
-}
-"scripts": {
-  "build:css": "node build-css.js",
-  "prestart": "npm run build:css",
-  "prebuild": "npm run build:css",
-  "start": "react-scripts start",
-  "build": "react-scripts build"
 }

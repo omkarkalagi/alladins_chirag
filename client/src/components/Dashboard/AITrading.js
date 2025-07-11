@@ -1,90 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { getAITradeRecommendations } from '../../services/aiService';
+import React, { useState } from 'react';
 
-const AITrading = ({ sector }) => {
-  const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true);
+function AITrading({ sector, onSelectStock }) {
+  const [prediction, setPrediction] = useState(null);
+  const stocks = {
+    Technology: ['AAPL', 'MSFT', 'GOOGL', 'META', 'NVDA'],
+    Finance: ['JPM', 'BAC', 'GS', 'V', 'MA'],
+    Healthcare: ['JNJ', 'PFE', 'UNH', 'MRK', 'ABT']
+  };
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      try {
-        setLoading(true);
-        const data = await getAITradeRecommendations(sector);
-        setRecommendations(data.recommendations || []);
-        setLoading(false);
-      } catch (error) {
-        console.error('Failed to load AI recommendations:', error);
-        setLoading(false);
-      }
-    };
-    
-    if (sector) fetchRecommendations();
-  }, [sector]);
-
-  if (loading) return <div className="p-4 text-center">Loading AI recommendations...</div>;
+  const analyzeSector = () => {
+    // Simulate AI analysis
+    setTimeout(() => {
+      setPrediction({
+        direction: Math.random() > 0.5 ? 'Bullish' : 'Bearish',
+        confidence: (Math.random() * 100).toFixed(1)
+      });
+    }, 1000);
+  };
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 mt-6">
-      <h3 className="text-xl font-bold text-gray-800 mb-4">
-        AI Trading Recommendations for {sector}
-      </h3>
-      
-      <div className="overflow-x-auto">
-        <table className="w-full text-left">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-2">Stock</th>
-              <th className="px-4 py-2">Current Price</th>
-              <th className="px-4 py-2">AI Prediction</th>
-              <th className="px-4 py-2">Confidence</th>
-              <th className="px-4 py-2">Action</th>
-              <th className="px-4 py-2">Target Entry</th>
-              <th className="px-4 py-2">Target Exit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recommendations.map((rec, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium">{rec.symbol}</td>
-                <td className="px-4 py-3">₹{rec.currentPrice.toFixed(2)}</td>
-                <td className={`px-4 py-3 font-medium ${
-                  rec.prediction.direction === 'up' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {rec.prediction.direction === 'up' ? '↑ Bullish' : '↓ Bearish'}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div 
-                      className={`h-2.5 rounded-full ${
-                        rec.confidence > 85 ? 'bg-green-600' : 
-                        rec.confidence > 70 ? 'bg-yellow-500' : 'bg-red-600'
-                      }`} 
-                      style={{ width: `${rec.confidence}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-xs text-gray-500">{rec.confidence}%</span>
-                </td>
-                <td className={`px-4 py-3 font-bold ${
-                  rec.action === 'BUY' ? 'text-green-600' : 
-                  rec.action === 'SELL' ? 'text-red-600' : 'text-gray-600'
-                }`}>
-                  {rec.action}
-                </td>
-                <td className="px-4 py-3">₹{rec.targetEntry.toFixed(2)}</td>
-                <td className="px-4 py-3">₹{rec.targetExit.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="card">
+      <div className="card-header">
+        <h2>AI Trading - {sector} Sector</h2>
       </div>
-      
-      {recommendations.length === 0 && !loading && (
-        <div className="text-center py-8 text-gray-500">
-          No high-confidence trade opportunities in this sector currently
+      <div className="card-body">
+        <div className="flex justify-between items-center">
+          <div>
+            <h3 className="text-bold">Stocks:</h3>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {stocks[sector].map((stock) => (
+                <button
+                  key={stock}
+                  className="btn"
+                  onClick={() => onSelectStock(stock)}
+                  style={{ 
+                    background: 'rgba(59, 130, 246, 0.1)',
+                    color: 'var(--primary-gradient-from)'
+                  }}
+                >
+                  {stock}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <button 
+              className="btn btn-primary"
+              onClick={analyzeSector}
+            >
+              Analyze Sector
+            </button>
+            
+            {prediction && (
+              <div className="mt-4 p-4 rounded-lg bg-gray-100">
+                <h3 className="text-bold">AI Prediction:</h3>
+                <p>Direction: 
+                  <span className={prediction.direction === 'Bullish' ? 'text-green-600' : 'text-red-600'}>
+                    {prediction.direction}
+                  </span>
+                </p>
+                <p>Confidence: {prediction.confidence}%</p>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
-};
+}
 
 export default AITrading;

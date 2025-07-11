@@ -1,7 +1,39 @@
+/* Button Styles */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: linear-gradient(
+    to right, 
+    var(--primary-gradient-from), 
+    var(--primary-gradient-to)
+  );
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
 /* Dashboard Styles */
 .dashboard {
   width: 100%;
   padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
 }
 
 .dashboard-section {
@@ -10,6 +42,13 @@
   padding: 20px;
   box-shadow: var(--shadow-md);
   margin-bottom: 20px;
+}
+
+.dashboard h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+  text-align: center;
 }
 
 /* Card Styles */
@@ -23,33 +62,14 @@
 .card-header {
   padding: 16px 20px;
   border-bottom: 1px solid var(--gray-200);
+  background: linear-gradient(
+    to right, 
+    var(--primary-gradient-from), 
+    var(--primary-gradient-to)
+  );
+  color: white;
 }
 
 .card-body {
   padding: 20px;
-}
-
-/* Form Elements */
-.input-group {
-  margin-bottom: 15px;
-}
-
-.input-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.input-field {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: var(--primary-gradient-from);
 }

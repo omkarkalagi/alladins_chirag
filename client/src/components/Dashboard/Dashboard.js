@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import SectorAnalysis from './SectorAnalysis';
 import AITrading from './AITrading';
 import AutoTradePanel from './AutoTradePanel';
-import '../Dashboard.css'; // Component-specific CSS
 
 function Dashboard() {
   const [selectedSector, setSelectedSector] = useState(null);
@@ -10,7 +9,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <h1 className="text-center">Trading Dashboard</h1>
+      <h1>AI Trading Dashboard</h1>
       
       <div className="dashboard-section">
         <SectorAnalysis onSelectSector={setSelectedSector} />

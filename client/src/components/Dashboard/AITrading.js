@@ -71,3 +71,17 @@ function AITrading({ sector, onSelectStock }) {
 }
 
 export default AITrading;
+// Update in src/components/Dashboard/AITrading.js
+// Inside the return statement where you display the prediction:
+{prediction && (
+  <div className="mt-4 p-4 rounded-lg bg-gray-100">
+    <h3 className="font-bold">AI Prediction:</h3>
+    <p>
+      Direction: 
+      <span className={`ml-2 font-bold ${prediction.direction === 'Bullish' ? 'text-success' : 'text-danger'}`}>
+        {prediction.direction}
+      </span>
+    </p>
+    <p>Confidence: {prediction.confidence}%</p>
+  </div>
+)}

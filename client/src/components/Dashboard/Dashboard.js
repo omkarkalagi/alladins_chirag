@@ -2,28 +2,28 @@ import React, { useState } from 'react';
 import SectorAnalysis from './SectorAnalysis';
 import AITrading from './AITrading';
 import AutoTradePanel from './AutoTradePanel';
+import '../Dashboard.css'; // Component-specific CSS
 
-// Dashboard component
 function Dashboard() {
   const [selectedSector, setSelectedSector] = useState(null);
   const [selectedStock, setSelectedStock] = useState(null);
 
   return (
-    <div>
-      {/* Your existing dashboard content here */}
+    <div className="dashboard">
+      <h1 className="text-center">Trading Dashboard</h1>
       
-      <div className="mt-6">
+      <div className="dashboard-section">
         <SectorAnalysis onSelectSector={setSelectedSector} />
       </div>
 
       {selectedSector && (
-        <div className="mt-6">
+        <div className="dashboard-section mt-6">
           <AITrading sector={selectedSector} onSelectStock={setSelectedStock} />
         </div>
       )}
 
       {selectedStock && (
-        <div className="mt-6">
+        <div className="dashboard-section mt-6">
           <AutoTradePanel stock={selectedStock} />
         </div>
       )}
@@ -31,5 +31,4 @@ function Dashboard() {
   );
 }
 
-// Export as default
 export default Dashboard;

@@ -1,0 +1,6 @@
+/* Dashboard-specific styles */
+.dashboard h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+}

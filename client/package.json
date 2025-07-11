@@ -16,16 +16,13 @@
     "socket.io-client": "^4.7.4",
     "web-vitals": "^3.5.2"
   },
-  "scripts": {
-    "build:css": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.output.css",
-    "prestart": "npm run build:css",
-    "prebuild": "npm run build:css",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "full-build": "npm run build:css && npm run build"
-  },
+ "scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject",
+  "full-build": "npm run build"
+},
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -1,27 +1,7 @@
-@import url('https://rsms.me/inter/inter.css ');
-
-html {
-  font-family: 'Inter', sans-serif;
-}
-
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f3f4f6; /* gray-100 */
-}
-
+/* src/App.css */
+/* Only App-specific styles */
 .App {
   text-align: center;
 }
-/* client/src/index.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-body {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-}
+/* Add other App-specific styles below */

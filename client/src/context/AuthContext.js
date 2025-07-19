@@ -1,7 +1,9 @@
 // client/src/context/AuthContext.js
+
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
+// ✅ Set axios baseURL to your backend Render URL
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 axios.defaults.withCredentials = true;
 
@@ -40,11 +42,11 @@ export function AuthProvider({ children }) {
     setCurrentUser(data.user);
     return data;
   };
-  
+
   const sendOtp = async (phone) => {
     return await axios.post('/api/auth/send-otp', { phone });
   };
-  
+
   const verifyOtp = async (phone, otp) => {
     const { data } = await axios.post('/api/auth/verify-otp', { phone, otp });
     setCurrentUser(data.user);

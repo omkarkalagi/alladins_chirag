@@ -1,30 +1,28 @@
-/* Text Utilities */
-.text-center {
-  text-align: center;
-}
-
-.text-bold {
-  font-weight: 700;
-}
-
-/* Flex Utilities */
+/* src/styles/utilities.css */
 .flex {
   display: flex;
 }
 
-.flex-col {
-  flex-direction: column;
+.justify-between {
+  justify-content: space-between;
 }
 
 .items-center {
   align-items: center;
 }
 
-.justify-center {
-  justify-content: center;
+.grid {
+  display: grid;
 }
 
-/* Spacing Utilities */
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -33,100 +31,18 @@
   margin-top: 1.5rem;
 }
 
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
 .p-4 {
   padding: 1rem;
 }
 
-/* Background Utilities */
-.gradient-bg {
-  background: linear-gradient(
-    to right, 
-    var(--primary-gradient-from), 
-    var(--primary-gradient-to)
-  );
-}
-
-/* Animation Keyframes */
-@keyframes shimmer {
-  0% { background-position: -100% 0; }
-  100% { background-position: 100% 0; }
-}
-
-.animate-shimmer {
-  animation: shimmer 2s infinite;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-}
-/* Grid Utilities */
-.grid {
-  display: grid;
-}
-
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.md\:grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.gap-6 {
-  gap: 1.5rem;
-}
-
-/* Input Styles */
-.input-group {
-  margin-bottom: 1rem;
-}
-
-.input-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+.rounded-lg {
   border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: border-color 0.3s;
 }
-
-.input-field:focus {
-  outline: none;
-  border-color: var(--primary-gradient-from);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-/* Text Colors */
-.text-primary { color: var(--primary); }
-.text-secondary { color: var(--secondary); }
-.text-success { color: var(--success); }
-.text-warning { color: var(--warning); }
-.text-danger { color: var(--danger); }
-.text-info { color: var(--info); }
-.text-white { color: white; }
-.text-gray-500 { color: var(--gray-500); }
-.text-gray-700 { color: var(--gray-700); }
-.text-gray-900 { color: var(--gray-900); }
-
-/* Background Colors */
-.bg-primary { background-color: var(--primary); }
-.bg-secondary { background-color: var(--secondary); }
-.bg-success { background-color: var(--success); }
-.bg-warning { background-color: var(--warning); }
-.bg-danger { background-color: var(--danger); }
-.bg-info { background-color: var(--info); }
-.bg-gray-100 { background-color: var(--gray-100); }
-.bg-gray-200 { background-color: var(--gray-200); }
-.bg-white { background-color: white; }
-.bg-gradient-primary { background: var(--gradient-primary); }
-
-/* Add these to your existing utilities.css */
-/* ... rest of your utilities.css ... */

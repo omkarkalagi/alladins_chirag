@@ -1,4 +1,3 @@
-// src/pages/Dashboard.js
 import React from 'react';
 import MarketOverview from '../components/MarketOverview';
 import PortfolioPerformance from '../components/PortfolioPerformance';
@@ -8,10 +7,10 @@ import AutoTradePanel from '../components/Dashboard/AutoTradePanel';
 
 function Dashboard() {
   return (
-    <div className="dashboard">
+    <div className="dashboard bg-transparent">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-800">AI Trading Dashboard</h1>
-        <button className="bg-gradient-primary text-white py-2 px-6 rounded-lg font-bold shadow-md hover:opacity-90 transition">
+        <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-2 px-6 rounded-lg font-bold shadow-md hover:opacity-90 transition">
           Trade Now
         </button>
       </div>

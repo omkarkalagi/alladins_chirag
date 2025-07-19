@@ -1,80 +1,160 @@
+// src/components/MarketOverview.js
 import React from 'react';
-import { FaChartLine, FaSyncAlt } from 'react-icons/fa';
 
-const MarketOverview = ({ marketData }) => {
-  if (!marketData) {
-    return (
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold flex items-center">
-            <FaChartLine className="mr-2 text-blue-600" /> Market Overview
-          </h2>
-          <div className="text-sm text-gray-500 flex items-center">
-            <FaSyncAlt className="mr-1 animate-spin" /> Loading...
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-gray-100 border rounded-lg p-4 animate-pulse">
-              <div className="h-4 bg-gray-300 rounded w-3/4 mb-3"></div>
-              <div className="h-6 bg-gray-300 rounded w-1/2 mb-2"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/3"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
+function MarketOverview() {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold flex items-center">
-          <FaChartLine className="mr-2 text-blue-600" /> Market Overview
-        </h2>
-        <div className="text-sm text-gray-500 flex items-center">
-          <FaSyncAlt className="mr-1" /> Real-time Data
-        </div>
+    <div style={{
+      background: 'white',
+      borderRadius: '16px',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+      overflow: 'hidden',
+      marginBottom: '24px'
+    }}>
+      <div style={{
+        background: 'linear-gradient(to right, #3b82f6, #6366f1)',
+        padding: '16px 24px',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '1.25rem'
+      }}>
+        Market Overview
       </div>
       
-      <div className="flex flex-wrap items-center mb-4 bg-gray-50 p-3 rounded-lg">
-        <div className="mr-6">
-          <span className="text-gray-600">NIFTY 50: </span>
-          <span className="font-bold">{marketData.indices.nifty.value.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
-          <span className={`ml-2 ${marketData.indices.nifty.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-            {marketData.indices.nifty.change >= 0 ? '+' : ''}{marketData.indices.nifty.change.toFixed(2)}%
-          </span>
-        </div>
-        <div>
-          <span className="text-gray-600">SENSEX: </span>
-          <span className="font-bold">{marketData.indices.sensex.value.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
-          <span className={`ml-2 ${marketData.indices.sensex.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-            {marketData.indices.sensex.change >= 0 ? '+' : ''}{marketData.indices.sensex.change.toFixed(2)}%
-          </span>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {marketData.stocks.slice(0, 4).map((stock, index) => (
-          <div 
-            key={index} 
-            className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-300"
-          >
-            <h3 className="text-gray-600 text-sm mb-1">{stock.symbol}</h3>
-            <div className="flex justify-between items-center">
-              <div className="font-bold text-lg">₹{stock.price.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</div>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                stock.change >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-              }`}>
-                {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)}%
-              </span>
-            </div>
-            <p className="text-gray-500 text-sm mt-1">{stock.name}</p>
+      <div style={{ padding: '24px' }}>
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '16px',
+          marginBottom: '24px',
+          borderBottom: '1px solid #e5e7eb',
+          paddingBottom: '24px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#374151' }}>NIFTY 50:</span>
+            <span>18,432.45</span>
+            <span style={{ color: '#10b981', fontWeight: 'bold' }}>+0.85%</span>
           </div>
-        ))}
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#374151' }}>SENSEX:</span>
+            <span>62,187.34</span>
+            <span style={{ color: '#10b981', fontWeight: 'bold' }}>+0.92%</span>
+          </div>
+        </div>
+        
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '20px',
+          marginBottom: '24px'
+        }}>
+          <IndexCard 
+            title="NIFTY BANK" 
+            value="42,187.95" 
+            change="+1.25%" 
+            isPositive={true} 
+          />
+          
+          <IndexCard 
+            title="NIFTY IT" 
+            value="34,882.10" 
+            change="-0.35%" 
+            isPositive={false} 
+          />
+          
+          <IndexCard 
+            title="NIFTY AUTO" 
+            value="12,876.45" 
+            change="+0.92%" 
+            isPositive={true} 
+          />
+          
+          <IndexCard 
+            title="NIFTY PHARMA" 
+            value="14,321.60" 
+            change="+0.45%" 
+            isPositive={true} 
+          />
+        </div>
+        
+        <div>
+          <h3 style={{
+            fontSize: '1.1rem',
+            fontWeight: 'bold',
+            marginBottom: '16px',
+            color: '#1f2937'
+          }}>
+            Most Volatile Stocks
+          </h3>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            gap: '16px'
+          }}>
+            <VolatileStock name="RELIANCE" change="+2.3%" isPositive={true} />
+            <VolatileStock name="HDFC BANK" change="-1.8%" isPositive={false} />
+            <VolatileStock name="INFOSYS" change="+3.1%" isPositive={true} />
+            <VolatileStock name="TCS" change="-0.9%" isPositive={false} />
+          </div>
+        </div>
       </div>
     </div>
   );
-};
+}
+
+// Sub-component for index cards
+const IndexCard = ({ title, value, change, isPositive }) => (
+  <div style={{
+    background: '#f9fafb',
+    borderRadius: '12px',
+    padding: '16px',
+    borderLeft: `4px solid ${isPositive ? '#10b981' : '#ef4444'}`
+  }}>
+    <div style={{ 
+      fontSize: '0.9rem', 
+      fontWeight: '600', 
+      marginBottom: '8px',
+      color: '#4b5563'
+    }}>
+      {title}
+    </div>
+    <div style={{ 
+      fontSize: '1.5rem', 
+      fontWeight: 'bold',
+      marginBottom: '4px',
+      color: '#1f2937'
+    }}>
+      {value}
+    </div>
+    <div style={{ 
+      color: isPositive ? '#10b981' : '#ef4444',
+      fontWeight: 'bold'
+    }}>
+      {change}
+    </div>
+  </div>
+);
+
+// Sub-component for volatile stocks
+const VolatileStock = ({ name, change, isPositive }) => (
+  <div style={{
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    background: '#f9fafb',
+    padding: '12px 16px',
+    borderRadius: '8px',
+    borderLeft: `3px solid ${isPositive ? '#10b981' : '#ef4444'}`
+  }}>
+    <span style={{ fontWeight: '600' }}>{name}</span>
+    <span style={{ 
+      color: isPositive ? '#10b981' : '#ef4444',
+      fontWeight: 'bold'
+    }}>
+      {change}
+    </span>
+  </div>
+);
 
 export default MarketOverview;

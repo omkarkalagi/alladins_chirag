@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 function AITrading({ sector, onSelectStock }) {
+  // Add state for prediction
   const [prediction, setPrediction] = useState(null);
+  
   const stocks = {
     Technology: ['AAPL', 'MSFT', 'GOOGL', 'META', 'NVDA'],
     Finance: ['JPM', 'BAC', 'GS', 'V', 'MA'],
@@ -26,17 +28,17 @@ function AITrading({ sector, onSelectStock }) {
       <div className="card-body">
         <div className="flex justify-between items-center">
           <div>
-            <h3 className="text-bold">Stocks:</h3>
+            <h3 className="font-bold text-gray-700 mb-2">Stocks:</h3>
             <div className="flex flex-wrap gap-2 mt-2">
               {stocks[sector].map((stock) => (
                 <button
                   key={stock}
-                  className="btn"
-                  onClick={() => onSelectStock(stock)}
+                  className="px-4 py-2 rounded-md font-medium"
                   style={{ 
                     background: 'rgba(59, 130, 246, 0.1)',
-                    color: 'var(--primary-gradient-from)'
+                    color: 'var(--primary)'
                   }}
+                  onClick={() => onSelectStock(stock)}
                 >
                   {stock}
                 </button>
@@ -46,17 +48,17 @@ function AITrading({ sector, onSelectStock }) {
           
           <div>
             <button 
-              className="btn btn-primary"
+              className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               onClick={analyzeSector}
             >
               Analyze Sector
             </button>
             
             {prediction && (
-              <div className="mt-4 p-4 rounded-lg bg-gray-100">
-                <h3 className="text-bold">AI Prediction:</h3>
-                <p>Direction: 
-                  <span className={prediction.direction === 'Bullish' ? 'text-green-600' : 'text-red-600'}>
+              <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                <h3 className="font-bold text-gray-700 mb-2">AI Prediction:</h3>
+                <p className="mb-1">Direction: 
+                  <span className={`ml-2 font-bold ${prediction.direction === 'Bullish' ? 'text-green-600' : 'text-red-600'}`}>
                     {prediction.direction}
                   </span>
                 </p>
@@ -71,17 +73,3 @@ function AITrading({ sector, onSelectStock }) {
 }
 
 export default AITrading;
-// Update in src/components/Dashboard/AITrading.js
-// Inside the return statement where you display the prediction:
-{prediction && (
-  <div className="mt-4 p-4 rounded-lg bg-gray-100">
-    <h3 className="font-bold">AI Prediction:</h3>
-    <p>
-      Direction: 
-      <span className={`ml-2 font-bold ${prediction.direction === 'Bullish' ? 'text-success' : 'text-danger'}`}>
-        {prediction.direction}
-      </span>
-    </p>
-    <p>Confidence: {prediction.confidence}%</p>
-  </div>
-)}

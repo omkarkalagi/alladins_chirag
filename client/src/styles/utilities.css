@@ -1,4 +1,3 @@
-/* src/styles/utilities.css */
 .flex {
   display: flex;
 }
@@ -44,5 +43,5 @@
 }
 
 .rounded-lg {
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius);
 }

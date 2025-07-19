@@ -1,8 +1,3 @@
-import TopBar from './components/Dashboard/TopBar';
-import LoginPage from './components/Auth/Login';
-import Dashboard from './components/Dashboard/Dashboard';
-
-// src/App.js
 import React, { useState } from 'react';
 
 function App() {
@@ -20,78 +15,26 @@ function App() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-      WebkitFontSmoothing: 'antialiased',
-      MozOsxFontSmoothing: 'grayscale',
-      color: '#1f2937'
-    }}>
+    <div className="min-h-screen">
       {/* Top Navigation Bar */}
-      <div style={{
-        background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-        color: 'white',
-        padding: '16px 24px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            {/* Fixed apostrophe */}
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Alladin&apos;s Chirag</h1>
-            <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Kalagi Group of Companies</p>
+      <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 shadow-lg">
+        <div className="container flex justify-between items-center">
+          <div className="text-center">
+            <h1 className="text-xl font-bold">Alladin&apos;s Chirag</h1>
+            <p className="text-sm opacity-90">Kalagi Group of Companies</p>
           </div>
           
           {isLoggedIn && (
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                padding: '8px 16px',
-                borderRadius: '9999px',
-                border: 'none',
-                color: 'white',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}>
+            <div className="flex gap-3">
+              <button className="bg-white/20 flex items-center gap-1 px-4 py-2 rounded-full text-white transition hover:bg-white/30">
                 <span>Profile</span>
               </button>
-              <button style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                padding: '8px 16px',
-                borderRadius: '9999px',
-                border: 'none',
-                color: 'white',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}>
+              <button className="bg-white/20 flex items-center gap-1 px-4 py-2 rounded-full text-white transition hover:bg-white/30">
                 <span>Settings</span>
               </button>
               <button 
                 onClick={handleLogout}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  background: '#ef4444',
-                  padding: '8px 16px',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  color: 'white',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
+                className="bg-danger flex items-center gap-1 px-4 py-2 rounded-full text-white transition hover:bg-red-600"
               >
                 <span>Logout</span>
               </button>
@@ -101,11 +44,7 @@ function App() {
       </div>
 
       {/* Main Content Area */}
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '24px'
-      }}>
+      <div className="container py-6">
         {!isLoggedIn && activeTab === 'login' && (
           <LoginPage onLogin={handleLogin} onSwitchToSignup={() => setActiveTab('signup')} />
         )}
@@ -137,40 +76,20 @@ function LoginPage({ onLogin, onSwitchToSignup }) {
   };
 
   return (
-    <div style={{
-      maxWidth: '500px',
-      margin: '40px auto',
-      background: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-      overflow: 'hidden'
-    }}>
-      <div style={{ padding: '32px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1f2937' }}>Login to Your Account</h2>
-          <p style={{ color: '#6b7280' }}>Access your trading dashboard</p>
+    <div className="max-w-md mx-auto my-10 bg-white/10 backdrop-blur-lg rounded-xl shadow-xl overflow-hidden border border-white/20">
+      <div className="p-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-white">Login to Your Account</h2>
+          <p className="text-gray-200">Access your trading dashboard</p>
         </div>
         
         <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-6">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
               Email
             </label>
             <input
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                transition: 'border-color 0.3s'
-              }}
+              className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent transition"
               id="email"
               type="email"
               placeholder="Enter your email"
@@ -181,25 +100,12 @@ function LoginPage({ onLogin, onSwitchToSignup }) {
           </div>
           
           {!showOtp && (
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{ 
-                display: 'block', 
-                color: '#374151', 
-                fontSize: '0.875rem', 
-                fontWeight: 'bold',
-                marginBottom: '8px'
-              }}>
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2">
                 Password
               </label>
               <input
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  transition: 'border-color 0.3s'
-                }}
+                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent transition"
                 id="password"
                 type="password"
                 placeholder="Enter your password"
@@ -211,25 +117,13 @@ function LoginPage({ onLogin, onSwitchToSignup }) {
           )}
           
           {showOtp && (
-            <div style={{ marginBottom: '24px' }}>
-              <label style={{ 
-                display: 'block', 
-                color: '#374151', 
-                fontSize: '0.875rem', 
-                fontWeight: 'bold',
-                marginBottom: '8px'
-              }}>
+            <div className="mb-6">
+              <label htmlFor="otp" className="block text-sm font-medium text-gray-200 mb-2">
                 Mobile OTP
               </label>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="flex gap-2">
                 <input
-                  style={{
-                    flex: '1',
-                    padding: '12px 16px',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '8px',
-                    fontSize: '1rem'
-                  }}
+                  className="flex-1 px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                   id="otp"
                   type="text"
                   placeholder="Enter OTP"
@@ -239,15 +133,7 @@ function LoginPage({ onLogin, onSwitchToSignup }) {
                 />
                 <button
                   type="button"
-                  style={{
-                    background: '#3b82f6',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    cursor: 'pointer'
-                  }}
+                  className="bg-primary text-white font-bold px-4 py-3 rounded-lg hover:bg-primary-dark transition"
                 >
                   Send OTP
                 </button>
@@ -255,37 +141,20 @@ function LoginPage({ onLogin, onSwitchToSignup }) {
             </div>
           )}
           
-          <div style={{ marginBottom: '24px' }}>
+          <div className="mb-6">
             <button
               type="submit"
-              style={{
-                width: '100%',
-                background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-                color: 'white',
-                fontWeight: 'bold',
-                padding: '14px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                transition: 'all 0.3s ease'
-              }}
+              className="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition transform hover:-translate-y-0.5 shadow-md"
             >
               {showOtp ? 'Verify & Login' : 'Login'}
             </button>
           </div>
           
-          <div style={{ textAlign: 'center', marginTop: '16px' }}>
+          <div className="text-center mt-4">
             <button
               type="button"
               onClick={onSwitchToSignup}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#3b82f6',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
+              className="text-primary font-medium hover:underline"
             >
               Don't have an account? Sign Up
             </button>
@@ -316,40 +185,20 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
   };
 
   return (
-    <div style={{
-      maxWidth: '500px',
-      margin: '40px auto',
-      background: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-      overflow: 'hidden'
-    }}>
-      <div style={{ padding: '32px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          {/* Fixed apostrophe */}
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1f2937' }}>Create an Account</h2>
-          <p style={{ color: '#6b7280' }}>Join Alladin&apos;s Chirag today</p>
+    <div className="max-w-md mx-auto my-10 bg-white/10 backdrop-blur-lg rounded-xl shadow-xl overflow-hidden border border-white/20">
+      <div className="p-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-white">Create an Account</h2>
+          <p className="text-gray-200">Join Alladin&apos;s Chirag today</p>
         </div>
         
         <form onSubmit={handleSignup}>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-200 mb-2">
               Full Name
             </label>
             <input
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem'
-              }}
+              className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
               type="text"
               placeholder="Enter your full name"
               value={fullName}
@@ -358,24 +207,12 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
             />
           </div>
           
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-200 mb-2">
               Email
             </label>
             <input
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem'
-              }}
+              className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
               type="email"
               placeholder="Enter your email"
               value={email}
@@ -384,24 +221,12 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
             />
           </div>
           
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-200 mb-2">
               Password
             </label>
             <input
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem'
-              }}
+              className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
               type="password"
               placeholder="Create a password"
               value={password}
@@ -410,24 +235,12 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
             />
           </div>
           
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-200 mb-2">
               Confirm Password
             </label>
             <input
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem'
-              }}
+              className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
               type="password"
               placeholder="Confirm your password"
               value={confirmPassword}
@@ -436,25 +249,13 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
             />
           </div>
           
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-200 mb-2">
               Mobile Number
             </label>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div className="flex gap-2">
               <input
-                style={{
-                  flex: '1',
-                  padding: '12px 16px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '1rem'
-                }}
+                className="flex-1 px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                 type="text"
                 placeholder="Enter mobile number"
                 value={mobile}
@@ -463,15 +264,7 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
               />
               <button
                 type="button"
-                style={{
-                  background: '#3b82f6',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
+                className="bg-primary text-white font-bold px-4 py-3 rounded-lg hover:bg-primary-dark transition"
               >
                 Send OTP
               </button>
@@ -479,24 +272,12 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
           </div>
           
           {showOtp && (
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ 
-                display: 'block', 
-                color: '#374151', 
-                fontSize: '0.875rem', 
-                fontWeight: 'bold',
-                marginBottom: '8px'
-              }}>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-200 mb-2">
                 Enter OTP
               </label>
               <input
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '1rem'
-                }}
+                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                 type="text"
                 placeholder="Enter OTP sent to your mobile"
                 value={otp}
@@ -506,37 +287,20 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
             </div>
           )}
           
-          <div style={{ marginBottom: '24px' }}>
+          <div className="mb-6">
             <button
               type="submit"
-              style={{
-                width: '100%',
-                background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-                color: 'white',
-                fontWeight: 'bold',
-                padding: '14px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                transition: 'all 0.3s ease'
-              }}
+              className="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition transform hover:-translate-y-0.5 shadow-md"
             >
               {showOtp ? 'Verify & Create Account' : 'Create Account'}
             </button>
           </div>
           
-          <div style={{ textAlign: 'center' }}>
+          <div className="text-center">
             <button
               type="button"
               onClick={onSwitchToLogin}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#3b82f6',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
+              className="text-primary font-medium hover:underline"
             >
               Already have an account? Login
             </button>
@@ -551,24 +315,9 @@ function SignupPage({ onSignup, onSwitchToLogin }) {
 function Dashboard() {
   return (
     <div>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '32px'
-      }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 'bold' }}>AI Trading Dashboard</h1>
-        <button style={{
-          background: 'linear-gradient(to right, #10b981, #059669)',
-          color: 'white',
-          fontWeight: 'bold',
-          padding: '10px 24px',
-          borderRadius: '8px',
-          border: 'none',
-          cursor: 'pointer',
-          fontSize: '1rem',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-        }}>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold text-white">AI Trading Dashboard</h1>
+        <button className="bg-gradient-to-r from-success to-green-600 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition">
           Trade Now
         </button>
       </div>
@@ -576,12 +325,7 @@ function Dashboard() {
       {/* Market Overview Section */}
       <MarketOverview />
       
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '24px',
-        marginTop: '32px'
-      }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         <PortfolioPerformance />
         <SectorAnalysis />
       </div>
@@ -592,50 +336,27 @@ function Dashboard() {
 // Market Overview Component
 function MarketOverview() {
   return (
-    <div style={{
-      background: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-      overflow: 'hidden'
-    }}>
-      <div style={{
-        background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-        padding: '16px 24px',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '1.25rem'
-      }}>
+    <div className="dashboard-section">
+      <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 font-bold text-lg rounded-t-lg">
         Market Overview
       </div>
       
-      <div style={{ padding: '24px' }}>
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '16px',
-          marginBottom: '24px',
-          paddingBottom: '24px',
-          borderBottom: '1px solid #e5e7eb'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontWeight: 'bold', color: '#374151' }}>NIFTY 50:</span>
+      <div className="p-6">
+        <div className="flex flex-wrap gap-4 mb-6 pb-6 border-b border-white/20">
+          <div className="flex items-center gap-2">
+            <span className="font-bold">NIFTY 50:</span>
             <span>18,432.45</span>
-            <span style={{ color: '#10b981', fontWeight: 'bold' }}>+0.85%</span>
+            <span className="text-success font-bold">+0.85%</span>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontWeight: 'bold', color: '#374151' }}>SENSEX:</span>
+          <div className="flex items-center gap-2">
+            <span className="font-bold">SENSEX:</span>
             <span>62,187.34</span>
-            <span style={{ color: '#10b981', fontWeight: 'bold' }}>+0.92%</span>
+            <span className="text-success font-bold">+0.92%</span>
           </div>
         </div>
         
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '20px',
-          marginBottom: '24px'
-        }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 mb-6">
           <IndexCard 
             title="NIFTY BANK" 
             value="42,187.95" 
@@ -666,20 +387,11 @@ function MarketOverview() {
         </div>
         
         <div>
-          <h3 style={{
-            fontSize: '1.1rem',
-            fontWeight: 'bold',
-            marginBottom: '16px',
-            color: '#1f2937'
-          }}>
+          <h3 className="text-lg font-bold mb-4 text-white">
             Most Volatile Stocks
           </h3>
           
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-            gap: '16px'
-          }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <VolatileStock name="RELIANCE" change="+2.3%" isPositive={true} />
             <VolatileStock name="HDFC BANK" change="-1.8%" isPositive={false} />
             <VolatileStock name="INFOSYS" change="+3.1%" isPositive={true} />
@@ -694,32 +406,14 @@ function MarketOverview() {
 // Index Card Component
 function IndexCard({ title, value, change, isPositive }) {
   return (
-    <div style={{
-      background: '#f9fafb',
-      borderRadius: '12px',
-      padding: '16px',
-      borderLeft: `4px solid ${isPositive ? '#10b981' : '#ef4444'}`
-    }}>
-      <div style={{ 
-        fontSize: '0.9rem', 
-        fontWeight: '600', 
-        marginBottom: '8px',
-        color: '#4b5563'
-      }}>
+    <div className={`bg-white/5 p-4 rounded-lg border-l-4 ${isPositive ? 'border-success' : 'border-danger'}`}>
+      <div className="text-sm font-semibold text-gray-300 mb-2">
         {title}
       </div>
-      <div style={{ 
-        fontSize: '1.5rem', 
-        fontWeight: 'bold',
-        marginBottom: '4px',
-        color: '#1f2937'
-      }}>
+      <div className="text-xl font-bold text-white mb-1">
         {value}
       </div>
-      <div style={{ 
-        color: isPositive ? '#10b981' : '#ef4444',
-        fontWeight: 'bold'
-      }}>
+      <div className={`font-bold ${isPositive ? 'text-success' : 'text-danger'}`}>
         {change}
       </div>
     </div>
@@ -729,20 +423,9 @@ function IndexCard({ title, value, change, isPositive }) {
 // Volatile Stock Component
 function VolatileStock({ name, change, isPositive }) {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      background: '#f9fafb',
-      padding: '12px 16px',
-      borderRadius: '8px',
-      borderLeft: `3px solid ${isPositive ? '#10b981' : '#ef4444'}`
-    }}>
-      <span style={{ fontWeight: '600' }}>{name}</span>
-      <span style={{ 
-        color: isPositive ? '#10b981' : '#ef4444',
-        fontWeight: 'bold'
-      }}>
+    <div className={`flex justify-between items-center bg-white/5 px-4 py-3 rounded-lg border-l-3 ${isPositive ? 'border-success' : 'border-danger'}`}>
+      <span className="font-semibold text-white">{name}</span>
+      <span className={`font-bold ${isPositive ? 'text-success' : 'text-danger'}`}>
         {change}
       </span>
     </div>
@@ -752,119 +435,62 @@ function VolatileStock({ name, change, isPositive }) {
 // Portfolio Performance Component
 function PortfolioPerformance() {
   return (
-    <div style={{
-      background: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-      overflow: 'hidden',
-      height: '100%'
-    }}>
-      <div style={{
-        background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-        padding: '16px 24px',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '1.25rem'
-      }}>
+    <div className="dashboard-section h-full">
+      <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 font-bold text-lg rounded-t-lg">
         Portfolio Performance
       </div>
       
-      <div style={{ padding: '24px' }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px',
-          paddingBottom: '16px',
-          borderBottom: '1px solid #e5e7eb'
-        }}>
-          <h3 style={{ fontWeight: 'bold', color: '#1f2937' }}>TIN™ Portfolio</h3>
-          <span style={{ 
-            background: '#10b981',
-            color: 'white',
-            padding: '4px 12px',
-            borderRadius: '9999px',
-            fontSize: '0.875rem'
-          }}>Active</span>
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-4 pb-4 border-b border-white/20">
+          <h3 className="font-bold text-white">TIN™ Portfolio</h3>
+          <span className="bg-success text-white px-3 py-1 rounded-full text-sm">
+            Active
+          </span>
         </div>
         
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#6b7280' }}>Total Value</span>
-            <span style={{ fontWeight: 'bold' }}>¥1,254,870</span>
+        <div className="mb-6">
+          <div className="flex justify-between mb-3">
+            <span className="text-gray-300">Total Value</span>
+            <span className="font-bold text-white">¥1,254,870</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ color: '#6b7280' }}>Today's Gain</span>
-            <span style={{ color: '#10b981', fontWeight: 'bold' }}>+¥24,650</span>
+          <div className="flex justify-between mb-3">
+            <span className="text-gray-300">Today's Gain</span>
+            <span className="text-success font-bold">+¥24,650</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: '#6b7280' }}>Overall Return</span>
-            <span style={{ color: '#10b981', fontWeight: 'bold' }}>+18.45%</span>
+          <div className="flex justify-between">
+            <span className="text-gray-300">Overall Return</span>
+            <span className="text-success font-bold">+18.45%</span>
           </div>
         </div>
         
         <div>
-          <h3 style={{ fontWeight: 'bold', marginBottom: '16px', color: '#1f2937' }}>
+          <h3 className="font-bold mb-4 text-white">
             Investment Budget
           </h3>
           
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Enter Your Investment Budget (₹)
             </label>
             <input
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem'
-              }}
+              className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
               type="number"
               placeholder="500000"
             />
           </div>
           
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ 
-              display: 'block', 
-              color: '#374151', 
-              fontSize: '0.875rem', 
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Select Risk Profile
             </label>
-            <select style={{
-              width: '100%',
-              padding: '12px 16px',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '1rem'
-            }}>
+            <select className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent">
               <option>Low Risk</option>
               <option selected>Moderate Risk</option>
               <option>High Risk</option>
             </select>
           </div>
           
-          <button style={{
-            width: '100%',
-            background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-            color: 'white',
-            fontWeight: 'bold',
-            padding: '14px',
-            borderRadius: '8px',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '1rem'
-          }}>
+          <button className="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition shadow-md">
             Optimize Portfolio
           </button>
         </div>
@@ -878,42 +504,17 @@ function SectorAnalysis() {
   const sectors = ['Technology', 'Finance', 'Healthcare', 'Energy', 'Consumer Goods', 'Utilities'];
   
   return (
-    <div style={{
-      background: 'white',
-      borderRadius: '16px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-      overflow: 'hidden',
-      height: '100%'
-    }}>
-      <div style={{
-        background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-        padding: '16px 24px',
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: '1.25rem'
-      }}>
+    <div className="dashboard-section h-full">
+      <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 font-bold text-lg rounded-t-lg">
         Sector Analysis
       </div>
       
-      <div style={{ padding: '24px' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-          gap: '16px'
-        }}>
+      <div className="p-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {sectors.map((sector) => (
             <button
               key={sector}
-              style={{
-                background: 'rgba(59, 130, 246, 0.1)',
-                color: '#3b82f6',
-                padding: '12px',
-                borderRadius: '8px',
-                border: 'none',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
+              className="bg-primary/10 text-primary p-3 rounded-lg font-semibold hover:bg-primary/20 transition backdrop-blur-sm"
             >
               {sector}
             </button>

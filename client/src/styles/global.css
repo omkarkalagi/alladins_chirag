@@ -1,8 +1,46 @@
-/* src/styles/global.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
-/* Reset and base styles */
+:root {
+  /* Primary Colors */
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --secondary: #6366f1;
+  --secondary-dark: #4f46e5;
+  
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #06b6d4;
+  
+  /* Grayscale */
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  /* Backgrounds */
+  --bg-light: #ffffff;
+  --bg-dark: #0f172a;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Borders */
+  --border-radius: 8px;
+}
+
 *,
 *::before,
 *::after {
@@ -24,8 +62,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  /* Fixed gradient background */
-  background: linear-gradient(135deg, #172f5e 0%, #206e47 100%);
+  /* SINGLE SOURCE OF TRUTH FOR BACKGROUND */
+  background: linear-gradient(135deg, #12d9cf 0%, #4c0dc0 100%);
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
@@ -34,24 +72,8 @@ body {
   line-height: 1.6;
 }
 
-/* Ensure root element takes full height */
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-/* Add this as a backup - creates a fixed background layer */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #991875 0%, #8d8d07 100%);
-  z-index: -1;
-}
-body {
-  background: linear-gradient(135deg, #12d9cf 0%, #4c0dc0 100%) !important;
 }

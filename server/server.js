@@ -1,44 +1,33 @@
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Razorpay from 'razorpay';
-import authRoutes from './routes/authRoutes.js';
-import tradingRoutes from './routes/tradingRoutes.js';
-import paymentRoutes from './routes/paymentRoutes.js';
+import mongoose from 'mongoose';
+import authRoutes from './routes/auth.js';
 
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 
-// CORS configuration
+// Allow frontend origin
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true
 }));
 
-app.use(express.json());
-
-// Connect to MongoDB
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+}).then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
-// Initialize Razorpay
-export const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-
-// API routes
+// Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/trading', tradingRoutes);
-app.use('/api/payment', paymentRoutes);
 
+// Root check
 app.get('/', (req, res) => {
-  res.send('Alladin’s Chirag API Running');
+  res.send("Alladin's Chirag Backend is Running 🚀");
 });
 
 const PORT = process.env.PORT || 5000;

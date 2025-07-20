@@ -1,32 +1,37 @@
-import * as tf from '@tensorflow/tfjs';
+import React from 'react';
 
-// Pre-trained LSTM model for stock prediction
-export async function loadModel() {
-  const model = await tf.loadLayersModel('/models/stock-predictor/model.json');
-  return model;
-}
+// AI prediction logic using TensorFlow.js or similar
+export const predictMarketTrend = (historicalData) => {
+  // Placeholder prediction logic
+  const avg = historicalData.reduce((sum, val) => sum + val, 0) / historicalData.length;
+  return avg > 0.5 ? 'Bullish' : 'Bearish';
+};
 
-export async function predict(symbol, historicalData) {
-  const model = await loadModel();
+// ML model loader
+export const loadModel = async () => {
+  try {
+    // Placeholder model loading
+    console.log("Loading prediction model...");
+    return { predict: () => Math.random() };
+  } catch (error) {
+    console.error("Model loading failed:", error);
+    return null;
+  }
+};
+
+// React component for predictions
+const Predictor = ({ data }) => {
+  const prediction = predictMarketTrend(data);
   
-  // Preprocess data
-  const prices = historicalData.map(d => d.close);
-  const input = tf.tensor3d([prices.slice(-30)], [1, 30, 1]);
-  
-  // Make prediction
-  const prediction = model.predict(input);
-  const [buyProbability, sellProbability] = prediction.dataSync();
-  
-  // Calculate targets
-  const lastPrice = prices[prices.length - 1];
-  const entryPrice = lastPrice * (buyProbability > sellProbability ? 0.995 : 1.005);
-  const targetPrice = lastPrice * (buyProbability > sellProbability ? 1.03 : 0.97);
-  
-  return {
-    symbol,
-    action: buyProbability > sellProbability ? 'BUY' : 'SELL',
-    confidence: Math.max(buyProbability, sellProbability) * 100,
-    entryPrice: parseFloat(entryPrice.toFixed(2)),
-    targetPrice: parseFloat(targetPrice.toFixed(2))
-  };
-}
+  return (
+    <div className="prediction-card">
+      <h3>Market Prediction</h3>
+      <p>Current trend: <strong>{prediction}</strong></p>
+      <div className="confidence-meter">
+        <div style={{ width: `${Math.random() * 100}%` }}></div>
+      </div>
+    </div>
+  );
+};
+
+export default Predictor;

@@ -1,42 +1,66 @@
-// client/src/components/Dashboard/TradingPanel.js
 import React, { useState } from 'react';
 
-const TradingPanel = () => {
+const TradingPanel = ({ onExecuteTrade }) => {
   const [symbol, setSymbol] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [orderType, setOrderType] = useState('buy');
+  const [amount, setAmount] = useState('');
+  const [tradeType, setTradeType] = useState('buy');
+  const [orderType, setOrderType] = useState('market');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic to handle trade execution
-    console.log({ symbol, quantity, orderType });
+    onExecuteTrade({ symbol, amount: parseFloat(amount), tradeType, orderType });
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <h3 className="text-xl font-bold text-gray-800 mb-4">Trade</h3>
+    <div className="trading-panel">
+      <h3>Trading Panel</h3>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="symbol" className="block text-gray-700 mb-2">Symbol</label>
-          <input
-            type="text" id="symbol"
-            className="w-full px-3 py-2 border rounded-md"
-            value={symbol} onChange={(e) => setSymbol(e.target.value.toUpperCase())} required
+        <div className="form-group">
+          <label>Symbol</label>
+          <input 
+            type="text" 
+            value={symbol} 
+            onChange={(e) => setSymbol(e.target.value.toUpperCase())} 
+            placeholder="e.g. BTC" 
+            required 
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="quantity" className="block text-gray-700 mb-2">Quantity</label>
-          <input
-            type="number" id="quantity"
-            className="w-full px-3 py-2 border rounded-md"
-            value={quantity} onChange={(e) => setQuantity(e.target.value)} required
+        
+        <div className="form-group">
+          <label>Amount ($)</label>
+          <input 
+            type="number" 
+            value={amount} 
+            onChange={(e) => setAmount(e.target.value)} 
+            placeholder="0.00" 
+            min="0"
+            step="0.01"
+            required 
           />
         </div>
-        <div className="flex space-x-4 mb-6">
-          <button type="button" onClick={() => setOrderType('buy')} className={`w-full py-2 rounded-md ${orderType === 'buy' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>Buy</button>
-          <button type="button" onClick={() => setOrderType('sell')} className={`w-full py-2 rounded-md ${orderType === 'sell' ? 'bg-red-500 text-white' : 'bg-gray-200'}`}>Sell</button>
+        
+        <div className="form-row">
+          <div className="form-group">
+            <label>Type</label>
+            <select value={tradeType} onChange={(e) => setTradeType(e.target.value)}>
+              <option value="buy">Buy</option>
+              <option value="sell">Sell</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label>Order Type</label>
+            <select value={orderType} onChange={(e) => setOrderType(e.target.value)}>
+              <option value="market">Market</option>
+              <option value="limit">Limit</option>
+              <option value="stop">Stop Loss</option>
+            </select>
+          </div>
         </div>
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md">Place Order</button>
+        
+        <button type="submit" className="trade-button">
+          {tradeType === 'buy' ? 'Buy' : 'Sell'} {symbol || 'Asset'}
+        </button>
       </form>
     </div>
   );

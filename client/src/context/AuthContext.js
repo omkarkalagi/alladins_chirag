@@ -1,11 +1,5 @@
-// client/src/context/AuthContext.js
-
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-
-// ✅ Set axios baseURL to your backend Render URL
-axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
-axios.defaults.withCredentials = true;
+import { authService } from '../services/authService';
 
 const AuthContext = createContext();
 
@@ -18,54 +12,31 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data } = await axios.get('/api/auth/check');
-        setCurrentUser(data.user);
-      } catch (error) {
-        setCurrentUser(null);
-      }
+    const unsubscribe = authService.onAuthStateChanged(user => {
+      setCurrentUser(user);
       setLoading(false);
-    };
+    });
 
-    checkAuth();
+    return unsubscribe;
   }, []);
 
+  const signup = async (email, password) => {
+    return await authService.signup(email, password);
+  };
+
   const login = async (email, password) => {
-    const { data } = await axios.post('/api/auth/login', { email, password });
-    setCurrentUser(data.user);
-    return data;
-  };
-
-  const signup = async (name, email, password) => {
-    const { data } = await axios.post('/api/auth/signup', { name, email, password });
-    setCurrentUser(data.user);
-    return data;
-  };
-
-  const sendOtp = async (phone) => {
-    return await axios.post('/api/auth/send-otp', { phone });
-  };
-
-  const verifyOtp = async (phone, otp) => {
-    const { data } = await axios.post('/api/auth/verify-otp', { phone, otp });
-    setCurrentUser(data.user);
-    return data;
+    return await authService.login(email, password);
   };
 
   const logout = async () => {
-    await axios.post('/api/auth/logout');
-    setCurrentUser(null);
+    return await authService.logout();
   };
 
   const value = {
     currentUser,
-    login,
     signup,
-    logout,
-    sendOtp,
-    verifyOtp,
-    loading
+    login,
+    logout
   };
 
   return (

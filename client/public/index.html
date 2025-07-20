@@ -3,326 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1F2937">
-  <title>Alladin's Chirag | Kalagi Group of Companies</title>
-  <!-- Link global CSS -->
-  <link rel="stylesheet" href="%PUBLIC_URL%/styles/base.css">
-  <link rel="stylesheet" href="%PUBLIC_URL%/styles/global.css">
-  <!-- Font Awesome and Google Fonts -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css ">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src=" https://cdn.jsdelivr.net/npm/chart.js "></script>
-  <link rel="icon" href="favicon.ico">
+  <title>My Application</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="manifest" href="manifest.json">
-  <meta property="og:title" content="Alladin's Chirag | Kalagi Group of Companies" />
-  <meta property="og:description" content="A stock trading platform by Kalagi Group" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://alladins-chirag.vercel.app/ " />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .model-viewer {
+      border: 1px solid #ddd;
+      height: 400px;
+      margin: 2rem 0;
+      background: white;
+    }
+  </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script src="script.js"></script>
-</body>
-</html>
-<body>
-  <!-- Login Screen -->
-  <div class="login-container" id="login-screen">
-    <div class="login-card">
-      <div class="login-logo">
-        <div class="logo-icon">
-          <i class="fas fa-magic"></i>
-        </div>
-        <div class="logo-text">Alladin's Chirag</div>
-        <div class="company">Kalagi Group of Companies</div>
-      </div>
-      
-      <div class="login-form">
-        <div class="tabs">
-          <button class="tab active" data-tab="login">Login</button>
-          <button class="tab" data-tab="signup">Sign Up</button>
-          <button class="tab" data-tab="otp">Mobile OTP</button>
-        </div>
-        
-        <div class="tab-content active" id="login-tab">
-          <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" class="login-input" id="login-email" placeholder="Email" autocomplete="off">
-          </div>
-          
-          <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" class="login-input" id="login-password" placeholder="Password">
-          </div>
-          
-          <button class="login-btn" id="login-btn">
-            <i class="fas fa-sign-in-alt"></i> Login
-          </button>
-          
-          <div class="login-links">
-            <a href="#" id="forgot-password"><i class="fas fa-key"></i> Forgot Password?</a>
-          </div>
-        </div>
-        
-        <div class="tab-content" id="signup-tab">
-          <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" class="login-input" id="signup-name" placeholder="Full Name" autocomplete="off">
-          </div>
-          
-          <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" class="login-input" id="signup-email" placeholder="Email">
-          </div>
-          
-          <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" class="login-input" id="signup-password" placeholder="Password">
-          </div>
-          
-          <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" class="login-input" id="signup-confirm" placeholder="Confirm Password">
-          </div>
-          
-          <button class="login-btn" id="signup-btn">
-            <i class="fas fa-user-plus"></i> Create Account
-          </button>
-        </div>
-        
-        <div class="tab-content" id="otp-tab">
-          <div class="input-group">
-            <i class="fas fa-phone"></i>
-            <input type="tel" class="login-input" id="otp-phone" placeholder="Mobile Number" autocomplete="off">
-          </div>
-          
-          <button class="login-btn" id="send-otp-btn">
-            <i class="fas fa-mobile-alt"></i> Send OTP
-          </button>
-          
-          <div class="input-group" id="otp-container" style="display: none;">
-            <i class="fas fa-key"></i>
-            <input type="text" class="login-input" id="otp-code" placeholder="Enter OTP">
-          </div>
-          
-          <button class="login-btn" id="verify-otp-btn" style="display: none;">
-            <i class="fas fa-check"></i> Verify OTP
-          </button>
-        </div>
-      </div>
+  <div class="container">
+    <h1>Welcome to My Application</h1>
+    <p>3D models will be displayed below:</p>
+    
+    <div class="model-viewer">
+      <!-- Model viewer container -->
+      <p>Models will be loaded from /models directory</p>
     </div>
-  </div>
-  
-  <!-- Dashboard -->
-  <div class="dashboard-section" id="dashboard">
-    <div class="container">
-      <header>
-        <div class="logo">
-          <div class="logo-icon">
-            <i class="fas fa-magic"></i>
-          </div>
-          <div>
-            <div class="logo-text">Alladin's Chirag</div>
-            <div class="company">Kalagi Group of Companies</div>
-          </div>
-        </div>
-        
-        <div class="datetime">
-          <div id="current-date"></div>
-          <div id="current-time" class="pulse"></div>
-        </div>
-        
-        <div class="user-menu">
-          <div class="user-avatar" id="user-avatar">OK</div>
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="dropdown-item">
-              <i class="fas fa-user-circle"></i> Profile
-            </div>
-            <div class="dropdown-item">
-              <i class="fas fa-cog"></i> Settings
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-item" id="logout-btn">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </div>
-          </div>
-        </div>
-      </header>
-      
-      <div class="dashboard">
-        <div class="main-panel">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title"><i class="fas fa-chart-line"></i> Market Overview</h2>
-              <div class="market-indices">
-                NIFTY 50: <span id="nifty-index">18,432.45</span> 
-                <span class="positive" id="nifty-change">+0.85%</span> | 
-                SENSEX: <span id="sensex-index">62,187.34</span> 
-                <span class="positive" id="sensex-change">+0.92%</span>
-              </div>
-            </div>
-            
-            <div class="market-overview" id="market-overview">
-              <div class="market-card">
-                <h3>NIFTY BANK</h3>
-                <div class="value">42,187.95</div>
-                <div class="change positive">+1.25%</div>
-              </div>
-              <div class="market-card">
-                <h3>NIFTY IT</h3>
-                <div class="value">34,892.10</div>
-                <div class="change negative">-0.35%</div>
-              </div>
-              <div class="market-card">
-                <h3>NIFTY AUTO</h3>
-                <div class="value">12,876.45</div>
-                <div class="change positive">+0.92%</div>
-              </div>
-              <div class="market-card">
-                <h3>NIFTY PHARMA</h3>
-                <div class="value">14,321.60</div>
-                <div class="change positive">+0.45%</div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title"><i class="fas fa-bolt"></i> Most Volatile Stocks</h2>
-              <div class="update-info">
-                <i class="fas fa-sync-alt"></i> Real-time Data
-              </div>
-            </div>
-            
-            <div class="stocks-list" id="stocks-list">
-              <!-- Stocks will be populated by JavaScript -->
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title"><i class="fas fa-chart-area"></i> Portfolio Performance</h2>
-              <div class="time-filter">
-                <select id="time-filter">
-                  <option>1D</option>
-                  <option>1W</option>
-                  <option selected>1M</option>
-                  <option>3M</option>
-                  <option>1Y</option>
-                </select>
-              </div>
-            </div>
-            
-            <div class="chart-container">
-              <canvas id="portfolioChart"></canvas>
-            </div>
-            
-            <div class="portfolio-stats">
-              <div class="stat-card">
-                <h3>Total Value</h3>
-                <div class="value" id="total-value">₹1,254,870</div>
-              </div>
-              <div class="stat-card">
-                <h3>Today's Gain</h3>
-                <div class="value positive" id="daily-gain">+₹24,650</div>
-              </div>
-              <div class="stat-card">
-                <h3>Overall Return</h3>
-                <div class="value positive" id="overall-return">+18.45%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="trading-panel">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title"><i class="fas fa-wallet"></i> Investment Budget</h2>
-            </div>
-            
-            <div class="budget-form">
-              <div class="form-group">
-                <label for="budget">Enter Your Investment Budget (₹)</label>
-                <input type="number" id="budget" placeholder="e.g. 500000" value="500000">
-              </div>
-              
-              <div class="form-group">
-                <label for="risk">Select Risk Profile</label>
-                <select id="risk">
-                  <option value="low">Low Risk</option>
-                  <option value="moderate" selected>Moderate Risk</option>
-                  <option value="high">High Risk</option>
-                  <option value="aggressive">Aggressive</option>
-                </select>
-              </div>
-              
-              <button class="btn" id="start-trading">
-                <i class="fas fa-play"></i> Start Algorithmic Trading
-              </button>
-              
-              <button class="btn btn-outline" id="configure-btn">
-                <i class="fas fa-cog"></i> Configure Algorithm
-              </button>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title"><i class="fas fa-robot"></i> Algorithm Status</h2>
-            </div>
-            
-            <div class="algo-status">
-              <div class="status-card">
-                <div class="status-header">
-                  <h3>Trading Status</h3>
-                  <div class="status-indicator">
-                    <span class="indicator active" id="algo-status-indicator"></span>
-                    <span id="algo-status-text">Active</span>
-                  </div>
-                </div>
-                <div class="status-content">
-                  Algorithm is actively monitoring <span id="monitoring-count">42</span> stocks and executing trades based on volatility patterns.
-                </div>
-              </div>
-              
-              <div class="status-card">
-                <div class="status-header">
-                  <h3>Today's Activity</h3>
-                </div>
-                <div class="activity-log" id="activity-log">
-                  <!-- Activity logs will be populated by JavaScript -->
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-title"><i class="fas fa-lightbulb"></i> Trading Insights</h2>
-            </div>
-            
-            <div class="insights">
-              <div class="status-content" id="trading-insights">
-                <p>Based on current market conditions and your risk profile, the algorithm recommends:</p>
-                <ul>
-                  <li>Increasing exposure to banking stocks (current momentum +2.1%)</li>
-                  <li>Reducing tech stock holdings (sector volatility increasing)</li>
-                  <li>Setting tighter stop-losses for mid-cap positions</li>
-                </ul>
-                <p>Today's volatility index: <strong>18.7</strong> (Moderate)</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <footer>
-        <p>Alladin's Chirag - An Intelligent Trading System by Omkar Kalagi</p>
-        <p>© 2023 Kalagi Group of Companies. All rights reserved. NSE Data provided in real-time.</p>
-        <p>Disclaimer: Trading involves risk. Past performance is not indicative of future results.</p>
-      </footer>
-    </div>
+
+    <footer>
+      <p>Built with modern web technologies</p>
+    </footer>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Fetch and display models
+    fetch('/models')
+      .then(response => response.text())
+      .then(data => {
+        console.log('Available models:', data);
+      })
+      .catch(error => console.error('Error loading models:', error));
+  </script>
 </body>
 </html>

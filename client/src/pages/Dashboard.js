@@ -1,80 +1,69 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React from 'react';
 import Header from '../components/UI/Header';
 import Sidebar from '../components/UI/Sidebar';
+import TopBar from '../components/UI/TopBar';
 import MarketOverview from '../components/Dashboard/MarketOverview';
 import Portfolio from '../components/Dashboard/Portfolio';
-import TradingPanel from '../components/Trading/TradingPanel';
-import ActivityLog from '../components/Dashboard/ActivityLog';
 import TradingInsights from '../components/Dashboard/TradingInsights';
-import { getPortfolio, getMarketData } from '../services/tradingService';
+import ActivityLog from '../components/Dashboard/ActivityLog';
+import TradingPanel from '../components/Dashboard/TradingPanel';
 
-export default function Dashboard() {
-  const { user } = useContext(AuthContext);
-  const [portfolio, setPortfolio] = useState(null);
-  const [marketData, setMarketData] = useState(null);
-  const [activeTab, setActiveTab] = useState('dashboard');
+const Dashboard = () => {
+  // Sample data for demonstration
+  const markets = [
+    { name: 'S&P 500', price: 4500.34, change: 0.8 },
+    { name: 'NASDAQ', price: 15200.45, change: 1.2 },
+    { name: 'DOW', price: 34500.67, change: -0.3 },
+    { name: 'Crypto', price: 1.8, change: 2.4 }
+  ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const portfolioData = await getPortfolio(user.id);
-      const marketData = await getMarketData();
-      setPortfolio(portfolioData);
-      setMarketData(marketData);
-    };
-    
-    fetchData();
-    const interval = setInterval(fetchData, 30000); // Refresh every 30 seconds
-    
-    return () => clearInterval(interval);
-  }, [user]);
+  const holdings = [
+    { symbol: 'AAPL', shares: 10, price: 152.34, value: 1523.40, change: 1.2 },
+    { symbol: 'MSFT', shares: 5, price: 340.12, value: 1700.60, change: 0.8 },
+    { symbol: 'BTC', shares: 0.25, price: 42567.89, value: 10641.97, change: 2.4 },
+    { symbol: 'ETH', shares: 2.5, price: 2345.67, value: 5864.18, change: 1.8 }
+  ];
+
+  const activities = [
+    { timestamp: '10:30 AM', action: 'Bought', symbol: 'AAPL', amount: 1523.40, type: 'buy' },
+    { timestamp: 'Yesterday', action: 'Sold', symbol: 'TSLA', amount: 850.50, type: 'sell' },
+    { timestamp: 'Dec 12', action: 'Deposit', symbol: 'Cash', amount: 5000.00, type: 'deposit' },
+    { timestamp: 'Dec 10', action: 'Bought', symbol: 'ETH', amount: 5864.18, type: 'buy' }
+  ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Header user={user} />
-        
-        <main className="flex-1 overflow-y-auto p-6">
-          {activeTab === 'dashboard' && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <MarketOverview data={marketData} />
-                <Portfolio portfolio={portfolio} />
+    <div className="dashboard-page">
+      <Header />
+      <div className="main-layout">
+        <Sidebar />
+        <div className="content-area">
+          <TopBar />
+          <div className="dashboard-content">
+            <div className="dashboard-row">
+              <div className="dashboard-column large">
+                <MarketOverview markets={markets} />
               </div>
-              <div className="space-y-6">
-                <TradingPanel />
-                <ActivityLog />
+              <div className="dashboard-column">
+                <Portfolio holdings={holdings} />
               </div>
             </div>
-          )}
-          
-          {activeTab === 'trading' && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                {/* Trading view charts would go here */}
-                <div className="bg-white p-4 rounded-lg shadow">
-                  <h2 className="text-xl font-bold mb-4">Trading Terminal</h2>
-                  <div className="h-96 bg-gray-100 rounded flex items-center justify-center">
-                    Trading Charts Placeholder
-                  </div>
-                </div>
+            
+            <div className="dashboard-row">
+              <div className="dashboard-column">
+                <TradingInsights marketData={markets} />
               </div>
-              <div>
-                <TradingInsights />
+              <div className="dashboard-column">
+                <TradingPanel onExecuteTrade={(trade) => console.log('Execute trade:', trade)} />
+              </div>
+              <div className="dashboard-column">
+                <ActivityLog activities={activities} />
               </div>
             </div>
-          )}
-          
-          {activeTab === 'wallet' && (
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-2xl font-bold mb-6">Wallet & Transactions</h2>
-              {/* Wallet management UI would go here */}
-            </div>
-          )}
-        </main>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Dashboard;

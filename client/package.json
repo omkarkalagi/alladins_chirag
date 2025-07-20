@@ -10,6 +10,7 @@
     "full-build": "npm run build"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^7.5.0",
     "@tensorflow/tfjs": "^4.22.0",
     "axios": "^1.10.0",
     "razorpay": "^2.9.6",

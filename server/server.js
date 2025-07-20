@@ -10,7 +10,7 @@ const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 
-// ✅ Allow requests from frontend domain
+// Configure CORS
 app.use(cors({
   origin: process.env.CLIENT_URL || '*',
   credentials: true
@@ -18,7 +18,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// ✅ Connect to MongoDB only once at cold start
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -26,15 +26,24 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('✅ MongoDB connected'))
 .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// ✅ Routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/stocks', stockRoutes);
 app.use('/api/payment', paymentRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Trading Platform Backend running');
+// Health check
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
 
-// ✅ Export the app for Vercel serverless function usage
+// Export for Vercel
 module.exports = app;
+
+// Start server if not in Vercel environment
+if (process.env.VERCEL !== '1') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}

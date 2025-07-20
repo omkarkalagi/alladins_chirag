@@ -1,4 +1,4 @@
-import api from './api';
+// Removed unused import api
 
 // Simulated user database
 const users = [
@@ -6,10 +6,8 @@ const users = [
 ];
 
 export const signup = async (email, password) => {
-  // In a real app, you'd make an API call to your backend
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      // Check if user already exists
       const userExists = users.some(user => user.email === email);
       if (userExists) {
         reject(new Error('User already exists'));
@@ -23,7 +21,6 @@ export const signup = async (email, password) => {
 };
 
 export const login = async (email, password) => {
-  // In a real app, you'd make an API call to your backend
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const user = users.find(u => u.email === email && u.password === password);
@@ -38,17 +35,24 @@ export const login = async (email, password) => {
 };
 
 export const logout = async () => {
-  // In a real app, you'd make an API call to your backend
   localStorage.removeItem('authToken');
   return Promise.resolve();
 };
 
 export const onAuthStateChanged = (callback) => {
-  // Simulate auth state change
   const token = localStorage.getItem('authToken');
   const user = token ? { email: 'user@example.com' } : null;
   callback(user);
-  
-  // Return unsubscribe function
   return () => {};
 };
+
+// Add default export object
+const authService = {
+  signup,
+  login,
+  logout,
+  onAuthStateChanged
+};
+
+export default authService;
+

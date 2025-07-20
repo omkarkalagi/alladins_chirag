@@ -1,9 +1,11 @@
+// src/components/Trading/AITrading.js
+
 import React, { useState } from 'react';
 import TradeExecution from './TradeExecution';
 import AutoTradePanel from './AutoTradePanel';
 import SectorAnalysis from './SectorAnalysis';
 
-const AllTrading = () => {
+const AITrading = () => {
   const [activeTab, setActiveTab] = useState('manual');
 
   return (
@@ -38,4 +40,4 @@ const AllTrading = () => {
   );
 };
 
-export default AllTrading;
+export default AITrading;

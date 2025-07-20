@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 const TopBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [notifications, setNotifications] = useState(3);
+
+
   
   const handleSearch = (e) => {
     e.preventDefault();

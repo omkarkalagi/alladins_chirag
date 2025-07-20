@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react'; // updated line
 import { Link, useLocation } from 'react-router-dom';
 
 const PaymentSuccess = () => {
@@ -6,7 +6,6 @@ const PaymentSuccess = () => {
   const [paymentData, setPaymentData] = useState(null);
   
   useEffect(() => {
-    // In a real app, you'd fetch payment data from your backend
     const params = new URLSearchParams(location.search);
     const amount = params.get('amount') || '100.00';
     const currency = params.get('currency') || 'USD';

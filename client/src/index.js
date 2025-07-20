@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/main.css'; // Ensure this file exists
+import './index.css';
+import './styles/base.css';
+import './styles/components.css';
+import './styles/utilities.css';
+import './styles/main.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

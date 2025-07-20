@@ -1,52 +1,55 @@
-// Removed unused import api
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api';
 
-// Simulated user database
-const users = [
-  { email: 'user@example.com', password: 'password123' }
-];
-
+// Sign up a new user
 export const signup = async (email, password) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const userExists = users.some(user => user.email === email);
-      if (userExists) {
-        reject(new Error('User already exists'));
-      } else {
-        users.push({ email, password });
-        localStorage.setItem('authToken', 'fake-auth-token');
-        resolve({ user: { email } });
-      }
-    }, 1000);
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Signup failed');
+  }
+
+  const data = await response.json();
+  localStorage.setItem('authToken', data.token);
+  return data;
 };
 
+// Login existing user
 export const login = async (email, password) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const user = users.find(u => u.email === email && u.password === password);
-      if (user) {
-        localStorage.setItem('authToken', 'fake-auth-token');
-        resolve({ user: { email } });
-      } else {
-        reject(new Error('Invalid email or password'));
-      }
-    }, 1000);
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
   });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Login failed');
+  }
+
+  const data = await response.json();
+  localStorage.setItem('authToken', data.token);
+  return data;
 };
 
+// Logout user
 export const logout = async () => {
   localStorage.removeItem('authToken');
   return Promise.resolve();
 };
 
+// Listen for auth state changes
 export const onAuthStateChanged = (callback) => {
   const token = localStorage.getItem('authToken');
-  const user = token ? { email: 'user@example.com' } : null;
+  const user = token ? { email: 'user@example.com' } : null; // You can decode token for actual email if JWT encoded
   callback(user);
   return () => {};
 };
 
-// Add default export object
 const authService = {
   signup,
   login,
@@ -55,4 +58,3 @@ const authService = {
 };
 
 export default authService;
-

@@ -14,7 +14,11 @@
       "src": "server/server.js",
       "use": "@vercel/node",
       "config": {
-        "include": ["server/**/*.js", "server/**/*.json"]
+        "includeFiles": [
+          "server/**/*.js",
+          "server/**/*.json",
+          "server/**/*.env"
+        ]
       }
     }
   ],

@@ -1,39 +1,31 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api';
+// src/services/authService.js
+
+import api from './api'; // uses your configured Axios instance with baseURL and interceptors
 
 // Sign up a new user
 export const signup = async (email, password) => {
-  const response = await fetch(`${API_BASE_URL}/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
-  });
+  try {
+    const response = await api.post('/auth/register', { email, password });
+    const { token, userId } = response; // adjust fields based on your backend response
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Signup failed');
+    localStorage.setItem('authToken', token);
+    return { userId, token };
+  } catch (error) {
+    throw new Error(error.message || 'Signup failed');
   }
-
-  const data = await response.json();
-  localStorage.setItem('authToken', data.token);
-  return data;
 };
 
 // Login existing user
 export const login = async (email, password) => {
-  const response = await fetch(`${API_BASE_URL}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
-  });
+  try {
+    const response = await api.post('/auth/login', { email, password });
+    const { token, userId } = response;
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Login failed');
+    localStorage.setItem('authToken', token);
+    return { userId, token };
+  } catch (error) {
+    throw new Error(error.message || 'Login failed');
   }
-
-  const data = await response.json();
-  localStorage.setItem('authToken', data.token);
-  return data;
 };
 
 // Logout user
@@ -45,7 +37,7 @@ export const logout = async () => {
 // Listen for auth state changes
 export const onAuthStateChanged = (callback) => {
   const token = localStorage.getItem('authToken');
-  const user = token ? { email: 'user@example.com' } : null; // You can decode token for actual email if JWT encoded
+  const user = token ? { email: 'user@example.com' } : null; // optionally decode JWT for real email
   callback(user);
   return () => {};
 };

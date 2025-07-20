@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 
 const TopBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [notifications, setNotifications] = useState(3);
+  const notifications = 3; // Removed useState since it's static and not updated
 
-
-  
   const handleSearch = (e) => {
     e.preventDefault();
     console.log('Searching for:', searchTerm);

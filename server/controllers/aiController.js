@@ -1,45 +1,35 @@
-const aiService = require('../services/aiService');
+const { predictMarket } = require('../services/tradingAlgo');
 
-// Get AI recommendations
-exports.getRecommendations = async (req, res) => {
+// AI prediction controller
+exports.getMarketPrediction = async (req, res) => {
   try {
-    const { sector } = req.query;
-    const sectors = await aiService.getSectorVolatility();
-    
-    // Get top 5 volatile stocks in sector
-    const sectorStocks = sectors.find(s => s.name === sector)?.topStocks.slice(0, 5) || [];
-    
-    // Get predictions for each stock
-    const recommendations = await Promise.all(
-      sectorStocks.map(symbol => aiService.generateTradeSignals(symbol))
-    );
-    
-    res.json({
-      sector,
-      volatility: sectors.find(s => s.name === sector)?.change || 0,
-      recommendations
-    });
+    const { symbol } = req.query;
+    const prediction = await predictMarket(symbol);
+    res.json({ success: true, prediction });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('AI prediction error:', error);
+    res.status(500).json({ success: false, message: 'Prediction failed' });
   }
 };
 
-// Execute auto-trade
-exports.autoTrade = async (req, res) => {
+exports.startAutoTrading = async (req, res) => {
   try {
-    const { userId, symbol, amount } = req.body;
-    const trade = await aiService.executeAutoTrade(userId, symbol, amount);
-    
-    if (trade) {
-      // Save to database (implementation needed)
-      res.json({ success: true, trade });
-    } else {
-      res.json({ 
-        success: false, 
-        message: 'No high-confidence trade opportunity found' 
-      });
-    }
+    const { userId, strategy, riskLevel } = req.body;
+    // Start auto trading logic would go here
+    res.json({ success: true, message: 'Auto trading started' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Auto trading start error:', error);
+    res.status(500).json({ success: false, message: 'Failed to start auto trading' });
+  }
+};
+
+exports.stopAutoTrading = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    // Stop auto trading logic would go here
+    res.json({ success: true, message: 'Auto trading stopped' });
+  } catch (error) {
+    console.error('Auto trading stop error:', error);
+    res.status(500).json({ success: false, message: 'Failed to stop auto trading' });
   }
 };

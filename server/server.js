@@ -1,36 +1,39 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import authRoutes from './routes/authRoutes.js';
-
-dotenv.config();
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const authRoutes = require('./server/routes/authRoutes');
+const aiRoutes = require('./server/routes/aiRoutes');
+const stockRoutes = require('./server/routes/stockRoutes');
+const paymentRoutes = require('./server/routes/paymentRoutes');
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use(cors());
 app.use(express.json());
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
-}));
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch((err) => console.error('❌ MongoDB connection error:', err));
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/stocks', stockRoutes);
+app.use('/api/payment', paymentRoutes);
 
-// Default route
+// Basic route
 app.get('/', (req, res) => {
-  res.send('Alladin\'s Chirag backend is running 🚀');
+  res.send('Trading Platform Backend');
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

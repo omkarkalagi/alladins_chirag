@@ -1,45 +1,34 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Name is required']
-  },
-  email: {
-    type: String,
+const PortfolioItemSchema = new mongoose.Schema({
+  symbol: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  avgPrice: { type: Number, required: true }
+});
+
+const UserSchema = new mongoose.Schema({
+  email: { 
+    type: String, 
+    required: true, 
     unique: true,
-    required: [true, 'Email is required']
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email']
   },
-  phone: {
-    type: String
-    // Optional: Add unique: true if phone-based login is mandatory
+  password: { 
+    type: String, 
+    required: true,
+    minlength: 6,
+    select: false
   },
-  password: {
-    type: String,
-    required: [true, 'Password is required']
+  balance: { 
+    type: Number, 
+    default: 0,
+    min: 0
+  },
+  portfolio: [PortfolioItemSchema],
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
-}, {
-  timestamps: true
 });
 
-/**
- * Password hashing middleware
- */
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-
-/**
- * Method to compare password
- */
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-const User = mongoose.model('User', userSchema);
-export default User;
+module.exports = mongoose.model('User', UserSchema);

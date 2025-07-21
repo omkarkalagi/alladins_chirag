@@ -5,8 +5,7 @@
   "homepage": ".",
   "proxy": "http://localhost:5000",
   "dependencies": {
-  "@stripe/react-stripe-js": "2.1.0",
-  "@stripe/stripe-js": "3.1.0",
+
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",

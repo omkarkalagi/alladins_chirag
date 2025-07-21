@@ -1,130 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alladins Chirag | Verify OTP</title>
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="manifest" href="/manifest.json" />
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alladins Chirag | Authentication</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap" rel="stylesheet">
   <style>
-    /* Base styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Roboto', 'Inter', sans-serif;
+    }
+    
+    :root {
+      --primary: #405DE6;
+      --secondary: #833AB4;
+      --accent: #FD1D1D;
+      --text: #262626;
+      --text-light: #8e8e8e;
+      --bg: #fafafa;
+      --border: #dbdbdb;
+      --white: #ffffff;
+      --success: #2ecc71;
+      --error: #e74c3c;
     }
     
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      background-color: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #333;
       padding: 20px;
+      background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
     }
     
-    .container {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    /* Auth Container */
+    .auth-container {
+      display: flex;
+      max-width: 935px;
       width: 100%;
-      max-width: 450px;
+      background: var(--white);
+      border-radius: 12px;
       overflow: hidden;
-      position: relative;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+      min-height: 600px;
     }
     
-    .header {
-      background: linear-gradient(to right, #ff7e5f, #feb47b);
-      padding: 25px 30px;
+    /* Image Section */
+    .image-section {
+      flex: 1;
+      background: linear-gradient(to bottom right, var(--primary), var(--secondary));
       display: flex;
       align-items: center;
+      justify-content: center;
+      padding: 40px;
       position: relative;
+      overflow: hidden;
+    }
+    
+    .image-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    }
+    
+    .brand-container {
+      text-align: center;
+      z-index: 1;
     }
     
     .logo {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .logo-inner {
+      width: 80px;
+      height: 80px;
+      background: var(--white);
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-right: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      flex-shrink: 0;
     }
     
-    .logo-inner {
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      position: relative;
-    }
-    
-    .logo-inner::after {
-      content: '';
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 12px;
-      height: 12px;
-      background: linear-gradient(45deg, #ff7e5f, #feb47b);
-      border-radius: 50%;
+    .logo-inner i {
+      font-size: 40px;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     
     .brand {
       font-family: 'Dancing Script', cursive;
-      font-size: 32px;
+      font-size: 48px;
       font-weight: 700;
-      color: white;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      letter-spacing: 1px;
-    }
-    
-    .content {
-      padding: 35px 30px 25px;
-    }
-    
-    h2 {
-      font-size: 24px;
-      color: #2c3e50;
+      color: var(--white);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       margin-bottom: 10px;
+    }
+    
+    .tagline {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 18px;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    /* Form Section */
+    .form-section {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .form-container {
+      max-width: 350px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    .form-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 14px 14px 14px 40px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      background: var(--bg);
+      transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(64, 93, 230, 0.1);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(64, 93, 230, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(64, 93, 230, 0.4);
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+    }
+    
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    
+    .divider-text {
+      padding: 0 15px;
+      color: var(--text-light);
+      font-size: 13px;
       font-weight: 600;
     }
     
-    .instruction {
-      color: #7f8c8d;
-      margin-bottom: 30px;
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn-secondary i {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+    
+    .switch-auth {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    
+    .switch-auth a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .app-links {
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    .app-links p {
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    
+    .app-stores {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .app-store {
+      height: 40px;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    
+    .company-name {
+      font-family: 'Pacifico', cursive;
+      font-size: 22px;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    
+    .since {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-light);
+    }
+    
+    /* OTP Section */
+    .otp-section {
+      display: none;
+      text-align: center;
+    }
+    
+    .otp-icon {
+      font-size: 50px;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    
+    .otp-title {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    
+    .otp-instruction {
+      color: var(--text-light);
+      margin-bottom: 25px;
       font-size: 15px;
     }
     
     .otp-inputs {
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
     }
     
     .otp-input {
       width: 50px;
       height: 60px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
       text-align: center;
       font-size: 24px;
       font-weight: 600;
@@ -132,102 +330,256 @@
     }
     
     .otp-input:focus {
-      border-color: #3498db;
-      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(64, 93, 230, 0.1);
       outline: none;
     }
     
-    .btn-verify {
-      background: linear-gradient(to right, #3498db, #2c3e50);
-      color: white;
-      border: none;
-      width: 100%;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-    }
-    
-    .btn-verify:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-    }
-    
-    .resend {
-      text-align: center;
-      margin: 20px 0;
-    }
-    
-    .resend a {
-      color: #3498db;
-      text-decoration: none;
+    .resend-otp {
+      color: var(--text-light);
       font-size: 14px;
-      transition: all 0.2s;
+      margin-bottom: 25px;
     }
     
-    .resend a:hover {
-      text-decoration: underline;
-    }
-    
-    .status {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 15px;
+    .resend-otp a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
     }
     
     .valid-badge {
-      background: #2ecc71;
+      display: inline-flex;
+      align-items: center;
+      background: var(--success);
       color: white;
-      padding: 6px 12px;
+      padding: 6px 15px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 500;
+      margin-bottom: 20px;
+    }
+    
+    .valid-badge i {
+      margin-right: 5px;
+    }
+    
+    /* Dashboard */
+    .dashboard {
+      display: none;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+      min-height: 80vh;
+    }
+    
+    .dashboard-header {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    
+    .dashboard-brand {
+      display: flex;
+      align-items: center;
+    }
+    
+    .dashboard-logo {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-right: 15px;
     }
     
-    .catalog-link {
-      color: #3498db;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 14px;
+    .dashboard-logo i {
+      font-size: 20px;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     
-    .catalog-link:hover {
-      text-decoration: underline;
+    .dashboard-name {
+      font-family: 'Dancing Script', cursive;
+      font-size: 28px;
+      font-weight: 700;
     }
     
-    .footer {
-      text-align: center;
-      padding: 25px 20px;
-      border-top: 1px solid #eee;
-      color: #7f8c8d;
-      font-size: 14px;
+    .user-info {
+      display: flex;
+      align-items: center;
     }
     
-    .company-name {
-      font-family: 'Pacifico', cursive;
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff7e5f, #feb47b);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    
+    .dashboard-main {
+      padding: 30px;
+    }
+    
+    .welcome-message {
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: var(--text);
+    }
+    
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+    }
+    
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      font-size: 20px;
+      color: white;
+    }
+    
+    .stat-icon.blue {
+      background: var(--primary);
+    }
+    
+    .stat-icon.purple {
+      background: var(--secondary);
+    }
+    
+    .stat-icon.red {
+      background: var(--accent);
+    }
+    
+    .stat-icon.green {
+      background: var(--success);
+    }
+    
+    .stat-content h3 {
       font-size: 18px;
-      color: #2c3e50;
       margin-bottom: 5px;
     }
     
-    .since {
-      font-size: 13px;
-      font-weight: 500;
+    .stat-content p {
+      font-size: 24px;
+      font-weight: 700;
     }
     
-    /* Responsive design */
-    @media (max-width: 480px) {
-      .header {
-        padding: 20px;
+    .recent-activity {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .activity-list {
+      list-style: none;
+    }
+    
+    .activity-item {
+      display: flex;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(64, 93, 230, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      color: var(--primary);
+    }
+    
+    .activity-content h4 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    
+    .activity-content p {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    
+    .activity-time {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 5px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .image-section {
+        display: none;
       }
       
-      .content {
-        padding: 25px 20px 15px;
+      .auth-container {
+        max-width: 450px;
+      }
+      
+      .form-section {
+        padding: 30px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+        background: white;
+      }
+      
+      .auth-container {
+        box-shadow: none;
+        border-radius: 0;
+      }
+      
+      .form-section {
+        padding: 25px 20px;
       }
       
       .otp-input {
@@ -235,103 +587,407 @@
         height: 50px;
         font-size: 20px;
       }
-      
-      .brand {
-        font-size: 28px;
-      }
     }
   </style>
 </head>
 <body>
-  <noscript>
-    <div style="text-align: center; padding: 50px; background-color: #f8d7da; color: #721c24;">
-      <h1 style="font-size: 24px; margin-bottom: 20px;">JavaScript is Disabled</h1>
-      <p style="font-size: 18px;">
-        You need to enable JavaScript to run this application. Please enable it in your browser settings.
-      </p>
+  <!-- Auth Container -->
+  <div class="auth-container">
+    <!-- Image Section -->
+    <div class="image-section">
+      <div class="brand-container">
+        <div class="logo">
+          <div class="logo-inner">
+            <i class="fas fa-gem"></i>
+          </div>
+        </div>
+        <div class="brand">Alladins Chirag</div>
+        <p class="tagline">Your trusted partner for premium trading solutions and exceptional service since 2001</p>
+      </div>
     </div>
-  </noscript>
+    
+    <!-- Form Section -->
+    <div class="form-section">
+      <!-- Login Form -->
+      <div class="form-container login-form">
+        <h2 class="form-title">Log in to your account</h2>
+        
+        <form id="loginForm">
+          <div class="input-group">
+            <i class="fas fa-phone input-icon"></i>
+            <input type="tel" class="form-control" id="phone" placeholder="Phone number" required>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="loginBtn">Send OTP</button>
+          
+          <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-text">OR</div>
+            <div class="divider-line"></div>
+          </div>
+          
+          <button type="button" class="btn btn-secondary">
+            <i class="fab fa-facebook"></i> Log in with Facebook
+          </button>
+          
+          <div class="switch-auth">
+            Don't have an account? <a href="#" id="signupLink">Sign up</a>
+          </div>
+        </form>
+        
+        <div class="app-links">
+          <p>Get the app.</p>
+          <div class="app-stores">
+            <img src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7Ym-Klz.png" alt="App Store" class="app-store">
+            <img src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png" alt="Google Play" class="app-store">
+          </div>
+        </div>
+        
+        <div class="footer">
+          <div class="company-name">Kalagi Group of Companies</div>
+          <div class="since">Since 2001</div>
+        </div>
+      </div>
+      
+      <!-- OTP Verification -->
+      <div class="form-container otp-section">
+        <div class="otp-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        
+        <h2 class="otp-title">Verify OTP</h2>
+        <p class="otp-instruction">Enter the 6-digit code sent to your phone</p>
+        
+        <div class="valid-badge">
+          <i class="fas fa-check-circle"></i> Valid for 5 minutes
+        </div>
+        
+        <div class="otp-inputs">
+          <input type="text" class="otp-input" maxlength="1" autofocus>
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+        </div>
+        
+        <button class="btn btn-primary" id="verifyBtn">Verify & Continue</button>
+        
+        <div class="resend-otp">
+          Didn't receive code? <a href="#" id="resendOtp">Resend OTP</a>
+        </div>
+        
+        <div class="switch-auth">
+          <a href="#" id="backToLogin"><i class="fas fa-arrow-left"></i> Back to login</a>
+        </div>
+      </div>
+    </div>
+  </div>
   
-  <div class="container">
-    <div class="header">
-      <div class="logo">
-        <div class="logo-inner"></div>
-      </div>
-      <div class="brand">Alladins Chirag</div>
-    </div>
-    
-    <div class="content">
-      <h2>Verify OTP</h2>
-      <p class="instruction">Enter the 6-digit code sent to your registered device</p>
-      
-      <div class="otp-inputs">
-        <input type="text" class="otp-input" maxlength="1" autofocus>
-        <input type="text" class="otp-input" maxlength="1">
-        <input type="text" class="otp-input" maxlength="1">
-        <input type="text" class="otp-input" maxlength="1">
-        <input type="text" class="otp-input" maxlength="1">
-        <input type="text" class="otp-input" maxlength="1">
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <div class="dashboard-brand">
+        <div class="dashboard-logo">
+          <i class="fas fa-gem"></i>
+        </div>
+        <div class="dashboard-name">Alladins Chirag</div>
       </div>
       
-      <button class="btn-verify">Verify & Continue</button>
-      
-      <div class="resend">
-        <a href="#">Didn't receive OTP?</a>
-      </div>
-      
-      <div class="status">
-        <span class="valid-badge">Valid</span>
-        <a href="#" class="catalog-link">Open Online Katalog</a>
+      <div class="user-info">
+        <div class="user-avatar">AK</div>
+        <div class="user-details">
+          <div class="user-name">Amit Kalagi</div>
+          <div class="user-role">Admin</div>
+        </div>
       </div>
     </div>
     
-    <div class="footer">
-      <div class="company-name">Kalagi Group of Companies</div>
-      <div class="since">Since 2001</div>
+    <div class="dashboard-main">
+      <h2 class="welcome-message">Welcome back, Amit!</h2>
+      
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Today's Orders</h3>
+            <p>142</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon purple">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Revenue</h3>
+            <p>$24,568</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon red">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3>New Customers</h3>
+            <p>28</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <i class="fas fa-box"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Inventory</h3>
+            <p>1,248 Items</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="recent-activity">
+        <h3 class="section-title">Recent Activity</h3>
+        <ul class="activity-list">
+          <li class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="activity-content">
+              <h4>New order placed</h4>
+              <p>Order #AC-7892 for $1,250</p>
+              <div class="activity-time">10 minutes ago</div>
+            </div>
+          </li>
+          
+          <li class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="activity-content">
+              <h4>New customer registered</h4>
+              <p>Sunil Enterprises from Mumbai</p>
+              <div class="activity-time">45 minutes ago</div>
+            </div>
+          </li>
+          
+          <li class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <div class="activity-content">
+              <h4>Shipment delivered</h4>
+              <p>Order #AC-7841 to Bangalore</p>
+              <div class="activity-time">2 hours ago</div>
+            </div>
+          </li>
+          
+          <li class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+            <div class="activity-content">
+              <h4>Payment received</h4>
+              <p>$5,840 from Reliance Trading</p>
+              <div class="activity-time">5 hours ago</div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const inputs = document.querySelectorAll('.otp-input');
-      
-      // Focus first input on load
-      inputs[0].focus();
-      
-      // Handle input navigation
-      inputs.forEach((input, index) => {
-        input.addEventListener('input', function() {
-          if (this.value.length === 1 && index < inputs.length - 1) {
-            inputs[index + 1].focus();
-          }
-        });
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const resendOtp = document.getElementById('resendOtp');
+    const backToLogin = document.getElementById('backToLogin');
+    const otpSection = document.querySelector('.otp-section');
+    const loginSection = document.querySelector('.login-form');
+    const authContainer = document.querySelector('.auth-container');
+    const dashboard = document.querySelector('.dashboard');
+    const otpInputs = document.querySelectorAll('.otp-input');
+    
+    // Store phone number
+    let userPhone = '';
+    
+    // Simulated Twilio functions
+    function sendOTP(phone) {
+      return new Promise((resolve) => {
+        // In a real app, this would call your backend which uses Twilio API
+        console.log(`Sending OTP to ${phone} via Twilio...`);
         
-        input.addEventListener('keydown', function(e) {
-          if (e.key === 'Backspace' && this.value === '' && index > 0) {
-            inputs[index - 1].focus();
+        // Simulate API call delay
+        setTimeout(() => {
+          // Generate a random 6-digit OTP
+          const otp = Math.floor(100000 + Math.random() * 900000);
+          console.log(`OTP sent: ${otp}`);
+          
+          // Store OTP in localStorage for verification
+          localStorage.setItem('otp', otp);
+          localStorage.setItem('otp_expiration', Date.now() + 300000); // 5 minutes
+          
+          resolve(true);
+        }, 1500);
+      });
+    }
+    
+    function verifyOTP(enteredOtp) {
+      return new Promise((resolve) => {
+        // Get stored OTP and expiration
+        const storedOtp = localStorage.getItem('otp');
+        const expiration = parseInt(localStorage.getItem('otp_expiration'));
+        
+        // Simulate API call delay
+        setTimeout(() => {
+          if (!storedOtp || !expiration) {
+            resolve({ success: false, message: 'OTP expired or invalid' });
+            return;
           }
-        });
+          
+          if (Date.now() > expiration) {
+            resolve({ success: false, message: 'OTP expired' });
+            return;
+          }
+          
+          if (enteredOtp === storedOtp) {
+            resolve({ success: true, message: 'OTP verified successfully' });
+          } else {
+            resolve({ success: false, message: 'Invalid OTP' });
+          }
+        }, 1500);
+      });
+    }
+    
+    // Event Listeners
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Get phone number
+      userPhone = document.getElementById('phone').value;
+      
+      // Validate phone number
+      if (!userPhone || userPhone.length < 10) {
+        alert('Please enter a valid phone number');
+        return;
+      }
+      
+      // Update button text
+      loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+      loginBtn.disabled = true;
+      
+      try {
+        // Send OTP via Twilio
+        const success = await sendOTP(userPhone);
+        
+        if (success) {
+          // Show OTP section
+          loginSection.style.display = 'none';
+          otpSection.style.display = 'block';
+          
+          // Focus first OTP input
+          otpInputs[0].focus();
+        }
+      } catch (error) {
+        alert('Error sending OTP: ' + error.message);
+      } finally {
+        // Reset button
+        loginBtn.innerHTML = 'Send OTP';
+        loginBtn.disabled = false;
+      }
+    });
+    
+    verifyBtn.addEventListener('click', async () => {
+      // Get entered OTP
+      let enteredOtp = '';
+      otpInputs.forEach(input => {
+        enteredOtp += input.value;
       });
       
-      // Verify button animation
-      const verifyBtn = document.querySelector('.btn-verify');
-      verifyBtn.addEventListener('click', function() {
-        this.textContent = 'Verifying...';
-        this.disabled = true;
+      // Validate OTP length
+      if (enteredOtp.length !== 6) {
+        alert('Please enter a 6-digit OTP');
+        return;
+      }
+      
+      // Update button text
+      verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+      verifyBtn.disabled = true;
+      
+      try {
+        // Verify OTP
+        const result = await verifyOTP(enteredOtp);
         
-        // Simulate verification process
-        setTimeout(() => {
-          this.textContent = 'Verified!';
-          this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+        if (result.success) {
+          // Successful verification
+          verifyBtn.innerHTML = '<i class="fas fa-check"></i> Verified!';
           
-          // Redirect after verification
+          // Show success for 1 second then redirect
           setTimeout(() => {
-            alert('OTP verified successfully!');
-            this.textContent = 'Verify & Continue';
-            this.disabled = false;
-            this.style.background = 'linear-gradient(to right, #3498db, #2c3e50)';
+            // Hide auth container, show dashboard
+            authContainer.style.display = 'none';
+            dashboard.style.display = 'block';
+            
+            // Reset OTP form
+            otpInputs.forEach(input => input.value = '');
+            verifyBtn.innerHTML = 'Verify & Continue';
+            verifyBtn.disabled = false;
           }, 1000);
-        }, 1500);
+        } else {
+          alert(`Verification failed: ${result.message}`);
+          throw new Error(result.message);
+        }
+      } catch (error) {
+        console.error('OTP verification error:', error);
+      } finally {
+        verifyBtn.innerHTML = 'Verify & Continue';
+        verifyBtn.disabled = false;
+      }
+    });
+    
+    resendOtp.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      // Update resend link text
+      resendOtp.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Resending...';
+      resendOtp.style.pointerEvents = 'none';
+      
+      try {
+        // Resend OTP
+        await sendOTP(userPhone);
+        alert('OTP resent successfully!');
+      } catch (error) {
+        alert('Error resending OTP: ' + error.message);
+      } finally {
+        setTimeout(() => {
+          resendOtp.innerHTML = 'Resend OTP';
+          resendOtp.style.pointerEvents = 'auto';
+        }, 2000);
+      }
+    });
+    
+    backToLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      otpSection.style.display = 'none';
+      loginSection.style.display = 'block';
+    });
+    
+    // OTP input navigation
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+      });
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && index > 0) {
+          otpInputs[index - 1].focus();
+        }
       });
     });
   </script>

@@ -3,32 +3,242 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alladins Chirag | Trading Dashboard</title>
+  <title>Alladins Chirag | Verify OTP</title>
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="manifest" href="/manifest.json" />
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Inter font for UI -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Dancing Script for branding -->
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome for icons -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
         crossorigin="anonymous" referrerpolicy="no-referrer" />
   
-  <!-- Preconnect to API domain -->
-  <link rel="preconnect" href="https://alladins-chirag.onrender.com">
-  
   <style>
-    /* Preload styles for better performance */
-    body {
+    /* Base styles */
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
       font-family: 'Inter', sans-serif;
-      background-color: #f1f5f9;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      padding: 20px;
+    }
+    
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 450px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .header {
+      background: linear-gradient(to right, #ff7e5f, #feb47b);
+      padding: 25px 30px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+    
+    .logo-inner {
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      position: relative;
+    }
+    
+    .logo-inner::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(45deg, #ff7e5f, #feb47b);
+      border-radius: 50%;
+    }
+    
+    .brand {
+      font-family: 'Dancing Script', cursive;
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      letter-spacing: 1px;
+    }
+    
+    .content {
+      padding: 35px 30px 25px;
+    }
+    
+    h2 {
+      font-size: 24px;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .instruction {
+      color: #7f8c8d;
+      margin-bottom: 30px;
+      font-size: 15px;
+    }
+    
+    .otp-inputs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    
+    .otp-input {
+      width: 50px;
+      height: 60px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .otp-input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      outline: none;
+    }
+    
+    .btn-verify {
+      background: linear-gradient(to right, #3498db, #2c3e50);
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .btn-verify:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    }
+    
+    .resend {
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .resend a {
+      color: #3498db;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .resend a:hover {
+      text-decoration: underline;
+    }
+    
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    
+    .valid-badge {
+      background: #2ecc71;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-right: 15px;
+    }
+    
+    .catalog-link {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .catalog-link:hover {
+      text-decoration: underline;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 25px 20px;
+      border-top: 1px solid #eee;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+    
+    .company-name {
+      font-family: 'Pacifico', cursive;
+      font-size: 18px;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+    
+    .since {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 480px) {
+      .header {
+        padding: 20px;
+      }
+      
+      .content {
+        padding: 25px 20px 15px;
+      }
+      
+      .otp-input {
+        width: 40px;
+        height: 50px;
+        font-size: 20px;
+      }
+      
+      .brand {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
@@ -42,9 +252,88 @@
     </div>
   </noscript>
   
-  <div id="root"></div>
-  
-  <!-- Preconnect to analytics if needed -->
-  <link rel="preconnect" href="https://www.google-analytics.com">
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-inner"></div>
+      </div>
+      <div class="brand">Alladins Chirag</div>
+    </div>
+    
+    <div class="content">
+      <h2>Verify OTP</h2>
+      <p class="instruction">Enter the 6-digit code sent to your registered device</p>
+      
+      <div class="otp-inputs">
+        <input type="text" class="otp-input" maxlength="1" autofocus>
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+        <input type="text" class="otp-input" maxlength="1">
+      </div>
+      
+      <button class="btn-verify">Verify & Continue</button>
+      
+      <div class="resend">
+        <a href="#">Didn't receive OTP?</a>
+      </div>
+      
+      <div class="status">
+        <span class="valid-badge">Valid</span>
+        <a href="#" class="catalog-link">Open Online Katalog</a>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <div class="company-name">Kalagi Group of Companies</div>
+      <div class="since">Since 2001</div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('.otp-input');
+      
+      // Focus first input on load
+      inputs[0].focus();
+      
+      // Handle input navigation
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', function() {
+          if (this.value.length === 1 && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        });
+        
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Backspace' && this.value === '' && index > 0) {
+            inputs[index - 1].focus();
+          }
+        });
+      });
+      
+      // Verify button animation
+      const verifyBtn = document.querySelector('.btn-verify');
+      verifyBtn.addEventListener('click', function() {
+        this.textContent = 'Verifying...';
+        this.disabled = true;
+        
+        // Simulate verification process
+        setTimeout(() => {
+          this.textContent = 'Verified!';
+          this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+          
+          // Redirect after verification
+          setTimeout(() => {
+            alert('OTP verified successfully!');
+            this.textContent = 'Verify & Continue';
+            this.disabled = false;
+            this.style.background = 'linear-gradient(to right, #3498db, #2c3e50)';
+          }, 1000);
+        }, 1500);
+      });
+    });
+  </script>
 </body>
 </html>

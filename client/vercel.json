@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "routes": [
     {
       "src": "/static/(.*)",
@@ -8,26 +7,8 @@
       }
     },
     {
-      "src": "/service-worker.js",
-      "headers": {
-        "Cache-Control": "no-cache"
-      }
-    },
-    {
-      "src": "/manifest.json",
-      "headers": {
-        "Cache-Control": "public, max-age=3600"
-      }
-    },
-    {
       "src": "/(.*)",
-      "dest": "/index.html",
-      "status": 200
+      "dest": "/index.html"
     }
-  ],
-  "build": {
-    "env": {
-      "REACT_APP_ENV": "production"
-    }
-  }
+  ]
 }

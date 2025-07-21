@@ -4,6 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const serverless = require('serverless-http'); // ✅ Always import for Vercel
 
 const authRoutes = require('./routes/authRoutes');
 const aiRoutes = require('./routes/aiRoutes');
@@ -38,11 +39,12 @@ app.get('/', (req, res) => {
   res.send('Trading Platform Backend running');
 });
 
-// ✅ Required for Vercel serverless deployment
-if (process.env.NODE_ENV === 'production') {
-  const serverless = require('serverless-http');
-  module.exports = serverless(app);
-} else {
+// Export for Vercel
+module.exports = app;
+module.exports.handler = serverless(app);
+
+// Local dev server
+if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
   });

@@ -3,6 +3,11 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+
+// Route imports
 const authRoutes = require('./routes/authRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const stockRoutes = require('./routes/stockRoutes');
@@ -11,9 +16,23 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// ✅ Security Middleware
+app.use(helmet()); // Sets various security headers
+app.use(mongoSanitize()); // Prevents MongoDB operator injection
+
+// ✅ Rate Limiting (100 requests per 15 minutes)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: 'Too many requests from this IP, please try again later'
+});
+app.use(limiter);
+
 // ✅ Enhanced CORS configuration
 const corsOptions = {
-  origin: process.env.CLIENT_URL || '*',
+  origin: process.env.CLIENT_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -64,7 +83,13 @@ app.get('/health', (req, res) => {
     status: 'UP',
     database: dbStatus,
     environment: process.env.NODE_ENV || 'development',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    services: {
+      twilio: process.env.TWILIO_ACCOUNT_SID ? 'configured' : 'missing',
+      stripe: process.env.STRIPE_SECRET_KEY ? 'configured' : 'missing',
+      alphaVantage: process.env.ALPHA_VANTAGE_API_KEY ? 'configured' : 'missing',
+      kite: process.env.KITE_API_KEY ? 'configured' : 'missing'
+    }
   });
 });
 
@@ -82,7 +107,9 @@ app.use((err, req, res, next) => {
   console.error('🚨 Server Error:', err.stack);
   
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
+  const message = process.env.NODE_ENV === 'production' 
+    ? 'Internal Server Error' 
+    : err.message;
   
   res.status(statusCode).json({
     success: false,
@@ -93,14 +120,21 @@ app.use((err, req, res, next) => {
 
 // ✅ Server startup
 const server = app.listen(PORT, () => {
+  console.log('='.repeat(50));
   console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode`);
   console.log(`🌐 Listening on port ${PORT}`);
-  console.log(`🔗 Access at: http://localhost:${PORT}`);
+  console.log(`🔗 MongoDB: ${process.env.MONGODB_URI.split('@')[1]?.split('/')[0] || 'Connected'}`);
+  console.log(`🔒 JWT: ${process.env.JWT_SECRET ? 'Configured' : 'Missing'}`);
+  console.log(`📱 Twilio: ${process.env.TWILIO_ACCOUNT_SID ? 'Ready' : 'Disabled'}`);
+  console.log(`💳 Stripe: ${process.env.STRIPE_SECRET_KEY ? 'Ready' : 'Disabled'}`);
+  console.log(`📈 Alpha Vantage: ${process.env.ALPHA_VANTAGE_API_KEY ? 'Ready' : 'Disabled'}`);
+  console.log(`📊 Kite API: ${process.env.KITE_API_KEY ? 'Ready' : 'Disabled'}`);
+  console.log('='.repeat(50));
 });
 
 // ✅ Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Received SIGINT. Shutting down gracefully...');
+const shutdown = () => {
+  console.log('\n🛑 Received shutdown signal. Shutting down gracefully...');
   server.close(() => {
     console.log('🚫 HTTP server closed');
     mongoose.connection.close(false, () => {
@@ -108,29 +142,18 @@ process.on('SIGINT', () => {
       process.exit(0);
     });
   });
-});
+};
 
-process.on('SIGTERM', () => {
-  console.log('\n🛑 Received SIGTERM. Shutting down gracefully...');
-  server.close(() => {
-    console.log('🚫 HTTP server closed');
-    mongoose.connection.close(false, () => {
-      console.log('🚫 MongoDB connection closed');
-      process.exit(0);
-    });
-  });
-});
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 // ✅ Unhandled rejection catcher
 process.on('unhandledRejection', (reason, promise) => {
   console.error('⚠️ Unhandled Rejection at:', promise, 'reason:', reason);
-  // Optionally exit the process here for production
-  // process.exit(1);
 });
 
 // ✅ Uncaught exception handler
 process.on('uncaughtException', (err) => {
   console.error('🚨 Uncaught Exception:', err);
-  // Exit the process as it's in an unclean state
-  process.exit(1);
+  shutdown();
 });

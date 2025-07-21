@@ -1,58 +1,29 @@
-// server/server.js
-
+// server.js
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const connectDB = require('./config/db');
 const cors = require('cors');
-const serverless = require('serverless-http');
 
-const authRoutes = require('./routes/authRoutes');
-const aiRoutes = require('./routes/aiRoutes');
-const stockRoutes = require('./routes/stockRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
+// Connect to database
+connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// ✅ Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL || '*',
-  credentials: true
-}));
+// Middleware
 app.use(express.json());
+app.use(cors());
 
-// ✅ MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('✅ MongoDB connected'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/stocks', require('./routes/stockRoutes'));
+app.use('/api/payment', require('./routes/paymentRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
 
-// ✅ Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/ai', aiRoutes);
-app.use('/api/stocks', stockRoutes);
-app.use('/api/payment', paymentRoutes);
-
-// ✅ Health check
-app.get('/', (req, res) => {
-  res.send('Trading Platform Backend running');
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Server error');
 });
 
-// ✅ Deployment mode handling
-if (process.env.RENDER === 'true') {
-  // Render: normal server listening
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-  });
-} else if (process.env.NODE_ENV === 'production') {
-  // Vercel: serverless export
-  module.exports = app;
-  module.exports.handler = serverless(app);
-} else {
-  // Local development
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running locally on port ${PORT}`);
-  });
-}
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

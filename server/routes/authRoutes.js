@@ -1,16 +1,16 @@
-// alladins_chirag/server/routes/authRoutes.js
-
+// routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const auth = require('../middleware/auth');
 
-// ✅ Register user
+// Public routes
 router.post('/register', authController.register);
-
-// ✅ Login user
 router.post('/login', authController.login);
+router.post('/send-otp', authController.sendOtp);
+router.post('/verify-otp', authController.verifyOtp);
 
-// ✅ Get user profile (secured in controller)
-router.get('/profile', authController.getUserProfile);
+// Protected route (requires valid JWT)
+router.get('/verify', auth, authController.verifyToken);
 
 module.exports = router;

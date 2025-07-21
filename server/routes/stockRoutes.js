@@ -1,13 +1,13 @@
+// routes/stockRoutes.js
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 const stockController = require('../controllers/stockController');
-const authMiddleware = require('../middleware/auth');
-
-// Public route
-router.get('/:symbol', stockController.getStockData);
 
 // Protected routes
-router.post('/trade', authMiddleware, stockController.executeTrade);
-router.get('/portfolio/:userId', authMiddleware, stockController.getPortfolio);
+router.get('/markets', auth, stockController.getMarketData);
+router.post('/trades', auth, stockController.executeTrade);
+router.get('/historical/:symbol', auth, stockController.getHistoricalData);
+router.get('/portfolio', auth, stockController.getPortfolio);
 
 module.exports = router;

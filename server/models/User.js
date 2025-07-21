@@ -1,34 +1,53 @@
+// models/User.js
 const mongoose = require('mongoose');
-
-const PortfolioItemSchema = new mongoose.Schema({
-  symbol: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  avgPrice: { type: Number, required: true }
-});
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-  email: { 
-    type: String, 
-    required: true, 
-    unique: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please add a valid email']
+  name: {
+    type: String,
+    required: true
   },
-  password: { 
-    type: String, 
+  email: {
+    type: String,
     required: true,
-    minlength: 6,
-    select: false
+    unique: true
   },
-  balance: { 
-    type: Number, 
-    default: 0,
-    min: 0
+  password: {
+    type: String,
+    required: true
   },
-  portfolio: [PortfolioItemSchema],
-  createdAt: {
+  phone: {
+    type: String,
+    required: true
+  },
+  otp: {
+    type: Number
+  },
+  otpExpiry: {
+    type: Date
+  },
+  balance: {
+    type: Number,
+    default: 100000 // Starting balance
+  },
+  portfolio: [{
+    symbol: String,
+    quantity: Number,
+    avgPrice: Number
+  }],
+  date: {
     type: Date,
     default: Date.now
   }
+});
+
+// Hash password before saving
+UserSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 module.exports = mongoose.model('User', UserSchema);

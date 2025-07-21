@@ -1,122 +1,143 @@
-// C:\Projects\alladins_chirag\server\controllers\authController.js
-
+// controllers/authController.js
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const twilio = require('twilio');
+const bcrypt = require('bcryptjs');
 
-/**
- * ✅ User registration
- * POST /api/auth/register
- */
+const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+
+// User registration
 exports.register = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Check if email and password are provided
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
-    }
-
+    const { name, email, password, phone } = req.body;
+    
     // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: 'User already exists' }); // 409 Conflict
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
     }
-
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create new user
-    const user = new User({
-      email,
-      password: hashedPassword,
-      balance: 0,
-      portfolio: []
-    });
-
+    user = new User({ name, email, password, phone });
+    
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    
     await user.save();
-
-    // Create JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1d'
-    });
-
-    res.status(201).json({
-      message: 'User registered successfully',
-      token,
-      userId: user._id,
-      email: user.email
-    });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Server error during registration' });
+    
+    // Generate JWT
+    const payload = { user: { id: user.id } };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+    
+    res.status(201).json({ token, user: { id: user.id, name, email } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
   }
 };
 
-/**
- * ✅ User login
- * POST /api/auth/login
- */
+// User login
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Validate inputs
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
-    }
-
-    // Find user by email
+    
+    // Find user
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' }); // 401 Unauthorized
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
-
-    // Compare passwords
+    
+    // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
-
-    // Create JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1d'
-    });
-
-    res.json({
-      message: 'Login successful',
-      token,
-      userId: user._id,
-      email: user.email
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error during login' });
+    
+    // Generate JWT
+    const payload = { user: { id: user.id } };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+    
+    res.json({ token, user: { id: user.id, name: user.name, email } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
   }
 };
 
-/**
- * ✅ Get user profile
- * GET /api/auth/profile
- * Requires JWT authentication middleware to set req.user
- */
-exports.getUserProfile = async (req, res) => {
+// Send OTP
+exports.sendOtp = async (req, res) => {
   try {
-    // req.user is set by JWT middleware after verifying token
-    const user = await User.findById(req.user.id).select('-password');
+    const { phone } = req.body;
+    
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otpExpiry = Date.now() + 300000; // 5 minutes
+    
+    // Find user by phone
+    let user = await User.findOne({ phone });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' }); // 404 Not Found
+      return res.status(400).json({ message: 'User not found' });
     }
-
-    res.json({
-      email: user.email,
-      balance: user.balance,
-      portfolio: user.portfolio,
-      createdAt: user.createdAt
+    
+    // Save OTP to user
+    user.otp = otp;
+    user.otpExpiry = otpExpiry;
+    await user.save();
+    
+    // Send SMS via Twilio
+    await client.messages.create({
+      body: `Your Alladins Chirag OTP is: ${otp}`,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: phone
     });
-  } catch (error) {
-    console.error('Get profile error:', error);
-    res.status(500).json({ message: 'Server error while fetching profile' });
+    
+    res.json({ message: 'OTP sent successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+// Verify OTP
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { phone, otp } = req.body;
+    
+    // Find user
+    const user = await User.findOne({ 
+      phone,
+      otp,
+      otpExpiry: { $gt: Date.now() } // Check if OTP not expired
+    });
+    
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid OTP or expired' });
+    }
+    
+    // Clear OTP
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+    
+    // Generate JWT
+    const payload = { user: { id: user.id } };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+    
+    res.json({ token, user: { id: user.id, name: user.name } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+// Verify token
+exports.verifyToken = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
   }
 };

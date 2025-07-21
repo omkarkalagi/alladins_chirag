@@ -9,17 +9,15 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is authenticated
     const token = localStorage.getItem('authToken');
     if (token) {
-      // In a real app, you would verify the token with your backend
+      // In a real app, verify token with backend
       setUser({ email: 'user@example.com' });
     }
     setLoading(false);
   }, []);
 
   const login = async (userData) => {
-    // In a real app, you would get a token from your backend
     localStorage.setItem('authToken', 'dummy-token');
     setUser(userData);
     navigate('/dashboard');

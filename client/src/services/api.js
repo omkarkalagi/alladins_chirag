@@ -50,13 +50,26 @@ api.interceptors.response.use(
       localStorage.removeItem('authToken');
       console.warn('Session expired. Redirecting to login.');
       window.location.href = '/login?session=expired';
+    } else if (status === 403) {
+      console.error('Forbidden:', data.message || 'Access denied');
+      return Promise.reject({
+        message: 'You do not have permission to perform this action'
+      });
+    } else if (status >= 500) {
+      console.error('Server Error:', data.message || 'Internal server error');
+      return Promise.reject({
+        message: 'Server error. Please try again later.'
+      });
     }
     
+    // Return custom error message if available
     return Promise.reject(data || error);
   }
 );
 
 // API methods
+
+// ✅ Authentication
 export const loginUser = async (credentials) => {
   try {
     const response = await api.post('/auth/login', credentials);
@@ -78,6 +91,38 @@ export const registerUser = async (userData) => {
   }
 };
 
+export const verifyToken = async () => {
+  try {
+    const response = await api.get('/auth/verify');
+    return response.data;
+  } catch (error) {
+    console.error('Token verification failed:', error);
+    throw error;
+  }
+};
+
+// ✅ Twilio OTP Services
+export const sendOtp = async (phone) => {
+  try {
+    const response = await api.post('/auth/send-otp', { phone });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to send OTP:', error);
+    throw error.response?.data || error;
+  }
+};
+
+export const verifyOtp = async (phone, otp) => {
+  try {
+    const response = await api.post('/auth/verify-otp', { phone, otp });
+    return response.data;
+  } catch (error) {
+    console.error('OTP verification failed:', error);
+    throw error.response?.data || error;
+  }
+};
+
+// ✅ Trading Data
 export const getMarketData = async () => {
   try {
     const response = await api.get('/stocks/markets');
@@ -88,6 +133,38 @@ export const getMarketData = async () => {
   }
 };
 
-// Add other API methods here...
+export const getPortfolio = async () => {
+  try {
+    const response = await api.get('/stocks/portfolio');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch portfolio:', error);
+    throw error;
+  }
+};
 
+export const executeTrade = async (tradeData) => {
+  try {
+    const response = await api.post('/stocks/trades', tradeData);
+    return response.data;
+  } catch (error) {
+    console.error('Trade execution failed:', error);
+    throw error;
+  }
+};
+
+export const getHistoricalData = async (symbol, timeframe = '1d') => {
+  try {
+    const response = await api.get(
+      `/stocks/historical/${symbol}`, 
+      { params: { timeframe } }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to fetch historical data for ${symbol}:`, error);
+    throw error;
+  }
+};
+
+// Default export
 export default api;

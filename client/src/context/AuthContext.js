@@ -1,6 +1,6 @@
 // client/src/context/AuthContext.js
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../services/api';
+import { loginUser, verifyToken } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const verifyToken = async () => {
+    const checkAuth = async () => {
       const token = localStorage.getItem('authToken');
       if (!token) {
         setLoading(false);
@@ -17,8 +17,8 @@ export const AuthProvider = ({ children }) => {
       }
       
       try {
-        const response = await api.get('/auth/verify');
-        setUser(response.data.user);
+        const userData = await verifyToken();
+        setUser(userData);
       } catch (error) {
         console.error('Token verification failed:', error);
         localStorage.removeItem('authToken');
@@ -27,12 +27,13 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
-    verifyToken();
+    checkAuth();
   }, []);
 
   const login = async (credentials) => {
     try {
-      const data = await api.loginUser(credentials);
+      const data = await loginUser(credentials);
+      localStorage.setItem('authToken', data.token);
       setUser(data.user);
       return data;
     } catch (error) {

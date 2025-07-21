@@ -18,13 +18,14 @@
     "react-scripts": "^0.0.0",
     "web-vitals": "^5.0.3"
   },
+ {
   "scripts": {
     "start": "react-scripts start",
-    "prebuild": "rm -rf node_modules || true",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
+  }
+}
   "eslintConfig": {
     "extends": [
       "react-app",

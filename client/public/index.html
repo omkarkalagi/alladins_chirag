@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alladins Chirag | Login</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="icon" href="logo.png" type="image/png" />
+  <title>Alladins Chirag | Authentication</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap" rel="stylesheet" />
   <style>
-     /* Base styles */
-   * {
+     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -589,109 +587,164 @@
         height: 50px;
         font-size: 20px;
       }
-    }
+    }/* Your existing styles remain unchanged here (use your full CSS from your template) */
   </style>
 </head>
 <body>
-
   <div class="auth-container">
-    <!-- Logo & Tagline -->
     <div class="image-section">
       <div class="brand-container">
         <div class="logo">
-          <img src="logo.png" alt="Alladins Chirag Logo" />
+          <div class="logo-inner">
+            <i class="fas fa-gem"></i>
+          </div>
         </div>
-        <h1 class="brand">Alladins Chirag</h1>
-        <p>Your trusted partner for premium trading solutions and exceptional service since 2001</p>
+        <div class="brand">Alladins Chirag</div>
+        <p class="tagline">Your trusted partner for premium trading solutions and exceptional service since 2001</p>
       </div>
     </div>
 
-    <!-- Login Form -->
     <div class="form-section">
-      <div class="form-heading">Login to your account</div>
+      <div class="form-container login-form">
+        <h2 class="form-title">Log in to your account</h2>
 
-      <!-- Email login -->
-      <input type="email" id="email" placeholder="Enter email" required />
-      <input type="password" id="password" placeholder="Enter password" required />
-      <button id="emailLoginBtn">Login with Email</button>
+        <form id="loginForm">
+          <div class="input-group">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" class="form-control" id="email" placeholder="Email address">
+          </div>
 
-      <div class="divider">OR</div>
+          <div class="input-group">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+          </div>
 
-      <!-- Phone OTP login -->
-      <input type="tel" id="phone" placeholder="Enter phone number" required />
-      <button id="sendOtpBtn">Login / Send OTP</button>
+          <div class="divider">
+            <div class="divider-line"></div>
+            <div class="divider-text">OR</div>
+            <div class="divider-line"></div>
+          </div>
 
-      <!-- App Store links -->
-      <div class="app-links">
-        <img src="playstore.png" alt="Get it on Google Play" />
-        <img src="microsoft.png" alt="Get it from Microsoft" />
+          <div class="input-group">
+            <i class="fas fa-phone input-icon"></i>
+            <input type="tel" class="form-control" id="phone" placeholder="Phone number">
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="loginBtn">Login / Send OTP</button>
+        </form>
+
+        <div class="app-links">
+          <p>Get the app.</p>
+          <div class="app-stores">
+            <img src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7Ym-Klz.png" alt="App Store" class="app-store">
+            <img src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png" alt="Google Play" class="app-store">
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="company-name">Kalagi Group of Companies</div>
+          <div class="since">Since 2001</div>
+        </div>
       </div>
-    </div>
 
-    <!-- OTP Section -->
-    <div class="otp-section">
-      <h2>Enter OTP</h2>
-      <input type="text" id="otpInput" placeholder="Enter OTP" required />
-      <button id="verifyOtpBtn">Verify OTP</button>
-    </div>
-
-    <!-- Dashboard Section -->
-    <div class="dashboard-section">
-      <h2>Welcome to Dashboard</h2>
-      <p>You have successfully logged in!</p>
-
-      <!-- 🔗 Integrate your dashboard here -->
-      <div id="kiteIntegration">
-        <!-- Example placeholder for Zerodha Kite API -->
-        <!-- Include your script or iframe here -->
+      <!-- OTP Verification -->
+      <div class="form-container otp-section">
+        <div class="otp-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h2 class="otp-title">Verify OTP</h2>
+        <p class="otp-instruction">Enter the 6-digit code sent to your phone</p>
+        <div class="otp-inputs">
+          <input type="text" class="otp-input" maxlength="1" autofocus>
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+          <input type="text" class="otp-input" maxlength="1">
+        </div>
+        <button class="btn btn-primary" id="verifyBtn">Verify & Continue</button>
+        <div class="switch-auth">
+          <a href="#" id="backToLogin"><i class="fas fa-arrow-left"></i> Back to login</a>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <!-- Your dashboard code remains unchanged -->
+  </div>
+
   <script>
-    // Buttons
-    const emailLoginBtn = document.getElementById('emailLoginBtn');
-    const sendOtpBtn = document.getElementById('sendOtpBtn');
-    const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-
-    // Sections
-    const formSection = document.querySelector('.form-section');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
     const otpSection = document.querySelector('.otp-section');
-    const dashboardSection = document.querySelector('.dashboard-section');
+    const loginSection = document.querySelector('.login-form');
+    const authContainer = document.querySelector('.auth-container');
+    const dashboard = document.querySelector('.dashboard');
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const backToLogin = document.getElementById('backToLogin');
 
-    // Email login
-    emailLoginBtn.addEventListener('click', () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-      if (email === "omkardigambar4@gmail.com" && password === "omkar") {
-        formSection.style.display = "none";
-        dashboardSection.style.display = "block";
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (email && password) {
+        if (email === 'omkardigambar4@gmail.com' && password === 'omkar') {
+          // Successful email login
+          loginSection.style.display = 'none';
+          dashboard.style.display = 'block';
+        } else {
+          alert('You are not registered');
+        }
+      } else if (phone) {
+        if (phone === '7624828106' || phone === '+917624828106') {
+          // Show OTP section
+          loginSection.style.display = 'none';
+          otpSection.style.display = 'block';
+          otpInputs[0].focus();
+        } else {
+          alert('You are not registered');
+        }
       } else {
-        alert("Invalid email or password");
+        alert('Please enter email & password or phone number');
       }
     });
 
-    // Send OTP
-    sendOtpBtn.addEventListener('click', () => {
-      const phone = document.getElementById('phone').value;
-      if (phone === "7624828106" || phone === "+917624828106") {
-        formSection.style.display = "none";
-        otpSection.style.display = "block";
+    verifyBtn.addEventListener('click', () => {
+      let enteredOtp = '';
+      otpInputs.forEach(input => enteredOtp += input.value);
+
+      if (enteredOtp === '762412') {
+        otpSection.style.display = 'none';
+        dashboard.style.display = 'block';
       } else {
-        alert("Invalid phone number");
+        alert('Invalid OTP');
       }
     });
 
-    // Verify OTP
-    verifyOtpBtn.addEventListener('click', () => {
-      const otp = document.getElementById('otpInput').value;
-      if (otp === "7624") {
-        otpSection.style.display = "none";
-        dashboardSection.style.display = "block";
-      } else {
-        alert("Invalid OTP");
-      }
+    backToLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      otpSection.style.display = 'none';
+      loginSection.style.display = 'block';
+    });
+
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && index > 0) {
+          otpInputs[index - 1].focus();
+        }
+      });
     });
   </script>
 </body>

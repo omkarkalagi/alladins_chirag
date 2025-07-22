@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="45" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="15%" fill="#000"/>
+  <text x="150" y="290" font-family="Roboto, sans-serif" font-size="140" font-weight="bold" fill="white">Google Play</text>
+  <polygon points="70,170 200,250 70,330" fill="#34A853"/>
+  <polygon points="70,170 200,250 70,330" fill="#FBBC05" transform="translate(20,-20)"/>
+  <polygon points="70,170 200,250 70,330" fill="#EA4335" transform="translate(20,20)"/>
+</svg>

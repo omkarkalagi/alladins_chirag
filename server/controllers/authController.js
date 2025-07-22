@@ -1,4 +1,3 @@
-// controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
@@ -9,7 +8,7 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 // Login route (Only your credentials work)
 exports.login = async (req, res) => {
   try {
-    const { email, password, phone } = req.body;
+    const { email, password } = req.body;
 
     // Allow only your email
     if (email !== 'omkardigambar4@gmail.com') {
@@ -28,25 +27,27 @@ exports.login = async (req, res) => {
     // Save OTP to DB
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ email, phone, otp, otpExpiry });
+      user = new User({ email, phone: '+917624828106', otp, otpExpiry });
     } else {
       user.otp = otp;
       user.otpExpiry = otpExpiry;
-      user.phone = phone;
+      user.phone = '+917624828106';
     }
     await user.save();
+
+    console.log(`Sending OTP ${otp} to +917624828106`);
 
     // Send SMS
     await client.messages.create({
       body: `Your Alladins Chirag OTP is: ${otp}`,
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: phone
+      to: '+917624828106'
     });
 
     res.json({ message: 'OTP sent successfully', userId: user._id });
 
   } catch (err) {
-    console.error(err.message);
+    console.error('Error sending OTP:', err.message);
     res.status(500).send('Server error');
   }
 };
@@ -77,7 +78,7 @@ exports.verifyOtp = async (req, res) => {
     res.json({ message: 'OTP verified', token });
 
   } catch (err) {
-    console.error(err.message);
+    console.error('Error verifying OTP:', err.message);
     res.status(500).send('Server error');
   }
 };

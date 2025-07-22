@@ -4,7 +4,6 @@ const twilio = require('twilio');
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-// Login route (Only your credentials work)
 exports.login = async (req, res) => {
   try {
     const { email, password, phone } = req.body;
@@ -26,9 +25,9 @@ exports.login = async (req, res) => {
     }
     await user.save();
 
-    // ✅ Send OTP via WhatsApp Sandbox
+    // ✅ Send OTP via WhatsApp using env variable
     await client.messages.create({
-      from: 'whatsapp:+14155238886', // Twilio Sandbox WhatsApp number
+      from: process.env.TWILIO_WHATSAPP_NUMBER,
       to: `whatsapp:${phone}`,
       body: `Your Alladins Chirag OTP is: ${otp}`
     });

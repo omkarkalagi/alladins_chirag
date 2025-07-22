@@ -20,6 +20,13 @@ const LoginPage = () => {
     setError('');
 
     try {
+      // ✅ Hardcoded admin login bypass if needed
+      if (email === 'omkardigambar4@gmail.com' && password === 'omkar') {
+        await login({ email, token: 'admin-token' });
+        navigate('/dashboard');
+        return;
+      }
+
       const res = await loginUser(email, password, phone);
       setEmail(email);
       setPhone(phone);
@@ -82,6 +89,15 @@ const LoginPage = () => {
       <footer className="py-6 text-center text-gray-500 text-sm">
         <div className="font-dancing text-lg">With ❤️ from Omkar Kalagi</div>
         <div className="font-roboto mt-1 text-xs">Kalagi Group of Companies</div>
+        <p className="text-sm mt-2">
+          Don't have an account?{' '}
+          <a
+            href="/signup"
+            className="font-medium text-yellow-500 bg-gray-900 px-2 rounded hover:text-yellow-400"
+          >
+            Sign up
+          </a>
+        </p>
       </footer>
     </div>
   );

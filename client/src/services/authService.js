@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Create axios instance with base URL
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL || '/api',
   headers: {
@@ -8,27 +7,14 @@ const api = axios.create({
   }
 });
 
-export const loginUser = async (email, password, phone) => {
+export const loginUser = async (email, password) => {
   try {
     const response = await api.post('/auth/login', {
       email,
-      password,
-      phone
+      password
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Login request failed');
-  }
-};
-
-export const verifyOtp = async (email, otp) => {
-  try {
-    const response = await api.post('/auth/verify-otp', {
-      email,
-      otp
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'OTP verification failed');
+    throw new Error(error.response?.data?.message || 'Authentication failed');
   }
 };

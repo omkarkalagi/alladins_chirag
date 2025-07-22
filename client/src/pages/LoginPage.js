@@ -2,44 +2,28 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LoginForm from '../components/Auth/LoginForm';
-import OtpForm from '../components/Auth/OtpForm';
 import Logo from '../assets/logo.svg';
-import { loginUser, verifyOtp } from '../services/authService';
 
 const LoginPage = () => {
-  const [step, setStep] = useState(1);
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async (credentials) => {
+  const handleLogin = async ({ email, password }) => {
     setLoading(true);
     setError('');
-    try {
-      const { email, password, phone } = credentials;
-      const res = await loginUser(email, password, phone);
-      setEmail(email);
-      setPhone(phone);
-      setStep(2); // move to OTP
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handleOtpVerification = async (otp) => {
-    setLoading(true);
-    setError('');
     try {
-      const res = await verifyOtp(email, otp);
-      await login({ email, token: res.token });
-      navigate('/dashboard');
+      // Hardcoded admin login
+      if (email === 'omkardigambar4@gmail.com' && password === 'omkar') {
+        await login({ email, token: 'admin-token' });
+        navigate('/dashboard');
+      } else {
+        setError('Invalid credentials');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'OTP verification failed');
+      setError('Login failed');
     } finally {
       setLoading(false);
     }
@@ -59,21 +43,11 @@ const LoginPage = () => {
               </h1>
             </div>
 
-            {step === 1 ? (
-              <LoginForm 
-                onSubmit={handleLogin} 
-                loading={loading}
-                error={error}
-              />
-            ) : (
-              <OtpForm 
-                phone={phone}
-                onSubmit={handleOtpVerification}
-                onResendOtp={() => handleLogin({ email, phone })}
-                loading={loading}
-                error={error}
-              />
-            )}
+            <LoginForm 
+              onSubmit={handleLogin} 
+              loading={loading}
+              error={error}
+            />
           </div>
         </div>
       </div>

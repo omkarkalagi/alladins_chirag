@@ -8,8 +8,16 @@ exports.login = async (req, res) => {
   try {
     const { email, password, phone } = req.body;
 
+    // Validate credentials
     if (email !== 'omkardigambar4@gmail.com' || password !== 'omkar') {
       return res.status(401).json({ message: 'Unauthorized user' });
+    }
+
+    // Validate phone number format
+    if (!phone || !phone.startsWith('+')) {
+      return res.status(400).json({ 
+        message: 'Phone number must include country code (e.g. +91XXXXXXXXXX)' 
+      });
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
@@ -25,9 +33,9 @@ exports.login = async (req, res) => {
     }
     await user.save();
 
-    // ✅ Fixed WhatsApp sending format
+    // Send OTP via WhatsApp
     await client.messages.create({
-      from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
+      from: process.env.TWILIO_WHATSAPP_NUMBER,
       to: `whatsapp:${phone}`,
       body: `Your Alladins Chirag OTP is: ${otp}`
     });
@@ -36,14 +44,20 @@ exports.login = async (req, res) => {
 
   } catch (err) {
     console.error('Twilio WhatsApp error:', err);
-    res.status(500).json({ 
+    
+    // Enhanced error logging
+    const errorDetails = {
+      message: err.message,
+      code: err.code,
+      twilioError: err.moreInfo,
+      fromNumber: process.env.TWILIO_WHATSAPP_NUMBER,
+      toNumber: `whatsapp:${req.body.phone}`,
+      accountSid: process.env.TWILIO_ACCOUNT_SID
+    };
+    
+    res.status(500).json({
       message: 'Failed to send OTP',
-      error: err.message,
-      details: {
-        from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
-        to: `whatsapp:${phone}`,
-        sid: process.env.TWILIO_ACCOUNT_SID
-      }
+      error: errorDetails
     });
   }
 };
@@ -57,8 +71,12 @@ exports.verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'User not found' });
     }
 
-    if (user.otp != otp || Date.now() > user.otpExpiry) {
-      return res.status(400).json({ message: 'Invalid or expired OTP' });
+    if (user.otp != otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    if (Date.now() > user.otpExpiry) {
+      return res.status(400).json({ message: 'OTP has expired' });
     }
 
     const payload = { user: { id: user.id } };
@@ -68,10 +86,13 @@ exports.verifyOtp = async (req, res) => {
     user.otpExpiry = undefined;
     await user.save();
 
-    res.json({ message: 'OTP verified', token });
+    res.json({ message: 'OTP verified successfully', token });
 
   } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ message: 'Server error', error: err.message });
+    console.error('OTP verification error:', err);
+    res.status(500).json({ 
+      message: 'Server error during OTP verification',
+      error: err.message 
+    });
   }
 };

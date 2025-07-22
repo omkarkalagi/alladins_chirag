@@ -1,36 +1,11 @@
 import api from './api';
 
-export const placeOrder = async (orderData) => {
-  const response = await api.post('/orders', orderData);
-  return response.data;
+export const getKiteLoginURL = async () => {
+  const response = await api.get('/stocks/kite-login-url');
+  return response.data.url;
 };
 
-export const cancelOrder = async (orderId) => {
-  const response = await api.delete(`/orders/${orderId}`);
-  return response.data;
-};
-
-export const getOpenOrders = async () => {
-  const response = await api.get('/orders/open');
-  return response.data;
-};
-
-export const getOrderHistory = async () => {
-  const response = await api.get('/orders/history');
-  return response.data;
-};
-
-export const startAutoTrading = async (strategy, params) => {
-  const response = await api.post('/autotrading/start', { strategy, params });
-  return response.data;
-};
-
-export const stopAutoTrading = async () => {
-  const response = await api.post('/autotrading/stop');
-  return response.data;
-};
-
-export const getAutoTradingStatus = async () => {
-  const response = await api.get('/autotrading/status');
+export const generateKiteSession = async (requestToken) => {
+  const response = await api.post('/stocks/kite-generate-session', { requestToken });
   return response.data;
 };

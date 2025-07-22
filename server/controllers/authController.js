@@ -1,38 +1,35 @@
 const jwt = require('jsonwebtoken');
 
-exports.login = async (req, res) => {
+exports.verifyMsg91Token = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Validate credentials
-    if (email !== 'omkardigambar4@gmail.com' || password !== 'omkar') {
-      return res.status(401).json({ message: 'Unauthorized user' });
-    }
-
+    const { token, phone } = req.body;
+    
+    // In a real implementation, you would verify with MSG91 API
+    // For now, we'll simulate successful verification
+    console.log(`Verified OTP for phone: ${phone} with token: ${token}`);
+    
     // Create JWT token
     const payload = { 
       user: { 
         id: 'admin-id',
-        email: email,
-        name: 'Admin User'
+        email: 'admin@alladinschirag.com',
+        name: 'Admin User',
+        phone: phone
       } 
     };
     
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const authToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     res.json({ 
-      message: 'Login successful', 
-      token,
-      user: {
-        name: 'Admin User',
-        email: email
-      }
+      message: 'OTP verified successfully', 
+      token: authToken,
+      user: payload.user
     });
 
   } catch (err) {
-    console.error('Login error:', err);
+    console.error('OTP verification error:', err);
     res.status(500).json({ 
-      message: 'Server error during authentication',
+      message: 'Server error during OTP verification',
       error: err.message 
     });
   }

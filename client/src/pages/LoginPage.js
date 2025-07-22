@@ -4,9 +4,10 @@ import { useAuth } from '../context/AuthContext';
 import LoginForm from '../components/Auth/LoginForm';
 import OtpForm from '../components/Auth/OtpForm';
 import Logo from '../assets/logo.svg';
+import { loginUser, verifyOtp } from '../services/authService';
 
 const LoginPage = () => {
-  const [step, setStep] = useState(1); // 1: Login, 2: OTP
+  const [step, setStep] = useState(1);
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -17,21 +18,14 @@ const LoginPage = () => {
   const handleLogin = async (credentials) => {
     setLoading(true);
     setError('');
-    
     try {
-      // In a real app, you would call your API here
-      // await api.login(credentials);
-      
-      // For demo: validate credentials
-      if (credentials.email === 'user@example.com' && credentials.password === 'password') {
-        setEmail(credentials.email);
-        setPhone(credentials.phone);
-        setStep(2); // Move to OTP step
-      } else {
-        setError('Invalid credentials. Use email: user@example.com, password: password');
-      }
+      const { email, password, phone } = credentials;
+      const res = await loginUser(email, password, phone);
+      setEmail(email);
+      setPhone(phone);
+      setStep(2); // move to OTP
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.message || 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -40,20 +34,12 @@ const LoginPage = () => {
   const handleOtpVerification = async (otp) => {
     setLoading(true);
     setError('');
-    
     try {
-      // In a real app, you would verify OTP here
-      // await api.verifyOtp(phone, otp);
-      
-      // For demo: any 6-digit code works
-      if (otp.length === 6) {
-        await login({ email });
-        navigate('/dashboard');
-      } else {
-        setError('Please enter a valid 6-digit OTP');
-      }
+      const res = await verifyOtp(email, otp);
+      await login({ email, token: res.token });
+      navigate('/dashboard');
     } catch (err) {
-      setError(err.message || 'OTP verification failed');
+      setError(err.response?.data?.message || 'OTP verification failed');
     } finally {
       setLoading(false);
     }
@@ -83,7 +69,7 @@ const LoginPage = () => {
               <OtpForm 
                 phone={phone}
                 onSubmit={handleOtpVerification}
-                onResendOtp={() => console.log('Resend OTP')}
+                onResendOtp={() => handleLogin({ email, phone })}
                 loading={loading}
                 error={error}
               />

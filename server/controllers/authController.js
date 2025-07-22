@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
     }
     await user.save();
 
-    console.log(`Sending OTP ${otp} to +917624828106`);
+    console.log(`Sending OTP ${otp} to +91 7624828106`);
 
     // Send SMS
     await client.messages.create({

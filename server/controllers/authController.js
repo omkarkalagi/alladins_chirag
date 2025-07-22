@@ -1,27 +1,34 @@
+// controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const twilio = require('twilio');
+const bcrypt = require('bcryptjs');
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
+// Login route (Only your credentials work)
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, phone } = req.body;
 
-    // Only your credentials allowed
-    if (email !== 'omkardigambar4@gmail.com' || password !== 'omkar') {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    // Allow only your email
+    if (email !== 'omkardigambar4@gmail.com') {
+      return res.status(401).json({ message: 'Unauthorized user' });
+    }
+
+    // Check password
+    if (password !== 'omkar') {
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
     // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const otpExpiry = Date.now() + 300000; // 5 min expiry
+    const otpExpiry = Date.now() + 300000; // 5 mins
 
-    // Upsert user with OTP (hardcoded phone number)
-    const phone = '+917624828106';
+    // Save OTP to DB
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ email, phone, otp, otpExpiry, password: 'omkar', name: 'Omkar' });
+      user = new User({ email, phone, otp, otpExpiry });
     } else {
       user.otp = otp;
       user.otpExpiry = otpExpiry;
@@ -29,23 +36,22 @@ exports.login = async (req, res) => {
     }
     await user.save();
 
-    // ✅ Send OTP via Twilio
-    const message = await client.messages.create({
-      body: `Sent from your Alladins Chirag - Your OTP is: ${otp}`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: phone
+    // Send WhatsApp message
+    await client.messages.create({
+      from: 'whatsapp:+14155238886', // Twilio sandbox WhatsApp number
+      to: `whatsapp:${phone}`,        // Ensure phone has country code (e.g. +91...)
+      body: `Your Alladins Chirag OTP is: ${otp}`
     });
 
-    console.log('OTP sent:', otp, 'Twilio SID:', message.sid);
-
-    res.json({ message: 'OTP sent successfully', userId: user._id });
+    res.json({ message: 'OTP sent via WhatsApp successfully', userId: user._id });
 
   } catch (err) {
-    console.error('OTP send error:', err.message, err);
-    res.status(500).send('Server error');
+    console.error('WhatsApp OTP send error:', err.message);
+    res.status(500).send('Server error while sending OTP');
   }
 };
 
+// Verify OTP route
 exports.verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -59,7 +65,7 @@ exports.verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
-    // Generate JWT
+    // Generate JWT after successful OTP verification
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
 
@@ -71,7 +77,7 @@ exports.verifyOtp = async (req, res) => {
     res.json({ message: 'OTP verified', token });
 
   } catch (err) {
-    console.error('OTP verify error:', err.message, err);
+    console.error(err.message);
     res.status(500).send('Server error');
   }
 };

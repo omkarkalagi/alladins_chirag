@@ -4,28 +4,17 @@ import { useAuth } from '../context/AuthContext';
 import Logo from '../assets/logo.svg';
 
 const LoginPage = () => {
-  const [phone, setPhone] = useState('');
-  const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
   const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handlePhoneLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (phone === '+917624828106' && otp === '7624') {
-      login({ phone, token: 'phone-login-token' });
-      navigate('/dashboard');
-    } else {
-      setError('Invalid phone number or OTP');
-    }
-  };
-
-  const handleEmailLogin = (e) => {
-    e.preventDefault();
-    if (email === 'omkardigambar4@gmail.com' && password === 'omkar') {
-      login({ email, token: 'email-login-token' });
+    if (phone === '+917624828106' && email === 'omkardigambar4@gmail.com' && password === 'omkar') {
+      login({ email, token: 'hardcoded-token' });
       navigate('/dashboard');
     } else {
       setError('You are not registered');
@@ -46,14 +35,13 @@ const LoginPage = () => {
               </h1>
             </div>
 
-            {error && (
-              <div className="bg-red-900 text-red-200 p-3 rounded-md text-center mb-4">
-                {error}
-              </div>
-            )}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="bg-red-900 text-red-200 p-3 rounded-md text-center">
+                  {error}
+                </div>
+              )}
 
-            {/* Phone + OTP login */}
-            <form onSubmit={handlePhoneLogin} className="space-y-4 mb-8">
               <input
                 type="tel"
                 placeholder="Phone Number"
@@ -62,24 +50,7 @@ const LoginPage = () => {
                 className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 required
               />
-              <input
-                type="text"
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full py-3 px-4 bg-gradient-to-r from-yellow-600 to-red-600 text-white font-semibold rounded-lg shadow-md hover:from-yellow-700 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-200"
-              >
-                Login with Phone
-              </button>
-            </form>
 
-            {/* Email + Password login */}
-            <form onSubmit={handleEmailLogin} className="space-y-4">
               <input
                 type="email"
                 placeholder="Email Address"
@@ -88,6 +59,7 @@ const LoginPage = () => {
                 className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 required
               />
+
               <input
                 type="password"
                 placeholder="Password"
@@ -96,18 +68,19 @@ const LoginPage = () => {
                 className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 required
               />
+
               <button
                 type="submit"
                 className="w-full py-3 px-4 bg-gradient-to-r from-yellow-600 to-red-600 text-white font-semibold rounded-lg shadow-md hover:from-yellow-700 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-200"
               >
-                Login with Email
+                Login
               </button>
             </form>
-
           </div>
-          <div className="flex justify-center items-center py-4 bg-gray-900">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Playstore" className="h-10 mx-2" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Microsoft_Store_logo_2022.svg" alt="Microsoft Store" className="h-10 mx-2" />
+
+          <div className="p-4 flex justify-center space-x-4">
+            <img src="/google-play-badge.png" alt="Google Play" className="h-10" />
+            <img src="/microsoft-store-badge.png" alt="Microsoft Store" className="h-10" />
           </div>
         </div>
       </div>

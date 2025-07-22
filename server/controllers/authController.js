@@ -13,7 +13,7 @@ exports.login = async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const otpExpiry = Date.now() + 300000;
+    const otpExpiry = Date.now() + 300000; // 5 mins
 
     let user = await User.findOne({ email });
     if (!user) {
@@ -25,16 +25,26 @@ exports.login = async (req, res) => {
     }
     await user.save();
 
+    // ✅ Fixed WhatsApp sending format
     await client.messages.create({
-      from: 'whatsapp:+14155238886',
+      from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
       to: `whatsapp:${phone}`,
       body: `Your Alladins Chirag OTP is: ${otp}`
     });
 
     res.json({ message: 'OTP sent successfully', userId: user._id });
+
   } catch (err) {
     console.error('Twilio WhatsApp error:', err);
-    res.status(500).send('Server error: WhatsApp message failed');
+    res.status(500).json({ 
+      message: 'Failed to send OTP',
+      error: err.message,
+      details: {
+        from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
+        to: `whatsapp:${phone}`,
+        sid: process.env.TWILIO_ACCOUNT_SID
+      }
+    });
   }
 };
 
@@ -59,13 +69,9 @@ exports.verifyOtp = async (req, res) => {
     await user.save();
 
     res.json({ message: 'OTP verified', token });
+
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
-};
-
-// ✅ Add dummy verifyToken if needed to fix the crash
-exports.verifyToken = (req, res) => {
-  res.json({ success: true });
 };

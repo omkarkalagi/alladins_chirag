@@ -20,7 +20,7 @@ const LoginPage = () => {
     setError('');
 
     try {
-      // ✅ Hardcoded admin login bypass if needed
+      // ✅ Hardcoded admin login bypass
       if (email === 'omkardigambar4@gmail.com' && password === 'omkar') {
         await login({ email, token: 'admin-token' });
         navigate('/dashboard');
@@ -89,14 +89,12 @@ const LoginPage = () => {
       <footer className="py-6 text-center text-gray-500 text-sm">
         <div className="font-dancing text-lg">With ❤️ from Omkar Kalagi</div>
         <div className="font-roboto mt-1 text-xs">Kalagi Group of Companies</div>
-       <p className="text-sm text-yellow-500 bg-gray-900 px-2 rounded hover:text-yellow-400">
-        Don't have an account?{' '}
-       <a href="/signup" className="underline">
-       Sign up
-      </a>
-      </p>
-
-
+        <p className="text-sm text-white mt-2">
+          Don't have an account?{' '}
+          <a href="/signup" className="text-yellow-500 underline">
+            Sign up
+          </a>
+        </p>
       </footer>
     </div>
   );

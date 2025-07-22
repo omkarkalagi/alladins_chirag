@@ -1,56 +1,26 @@
-<!-- Replace the entire form-section div with this code -->
-<div class="form-section">
-  <!-- Login Form -->
-  <div class="form-container login-form">
-    <h2 class="form-title">Log in to your account</h2>
-    
-    <!-- OTP Section -->
-    <form id="otpForm">
-      <div class="input-group">
-        <i class="fas fa-phone input-icon"></i>
-        <input type="tel" class="form-control" id="phone" placeholder="Phone number" required>
-      </div>
-      
-      <button type="submit" class="btn btn-primary" id="loginBtn">Send OTP</button>
-    </form>
-    
-    <div class="divider">
-      <div class="divider-line"></div>
-      <div class="divider-text">OR</div>
-      <div class="divider-line"></div>
-    </div>
-    
-    <!-- Email/Password Section -->
-    <form id="emailForm">
-      <div class="input-group">
-        <i class="fas fa-envelope input-icon"></i>
-        <input type="email" class="form-control" id="email" placeholder="Email Address" required>
-      </div>
-      
-      <div class="input-group">
-        <i class="fas fa-lock input-icon"></i>
-        <input type="password" class="form-control" id="password" placeholder="Password" required>
-      </div>
-      
-      <button type="submit" class="btn btn-primary" id="emailLoginBtn">Sign In</button>
-    </form>
-    
-    <div class="app-links">
-      <p>Get the app.</p>
-      <div class="app-stores">
-        <img src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7Ym-Klz.png" alt="App Store" class="app-store">
-        <img src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png" alt="Google Play" class="app-store">
-      </div>
-    </div>
-    
-    <div class="footer">
-      <div class="company-name">Kalagi Group of Companies</div>
-      <div class="since">Since 2001</div>
-    </div>
-  </div>
-  
-  <!-- OTP Verification -->
-  <div class="form-container otp-section">
-    <!-- ... keep your existing OTP verification section ... -->
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Alladins Chirag – Premium trading solutions and exceptional service since 2001."
+    />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Alladins Chirag</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for 'Dancing Script' and 'Roboto' -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Roboto&display=swap" rel="stylesheet">
+    <!-- Additional CSS -->
+    <link rel="stylesheet" href="%PUBLIC_URL%/styles/global.css" />
+  </head>
+  <body class="font-roboto bg-black text-white">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>

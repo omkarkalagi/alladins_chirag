@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { FaUser, FaLock, FaPhone } from 'react-icons/fa';
 
 const LoginForm = ({ onSubmit, loading, error }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ email, password });
+    onSubmit({ email, password, phone });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <h2 className="text-xl font-semibold text-white text-center mb-6">
-        Login to Your Account
+        Admin Login
       </h2>
-      
+
       {error && (
         <div className="bg-red-900 text-red-200 p-3 rounded-md text-center">
           {error}
         </div>
       )}
-      
+
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <FaUser className="text-gray-400" />
@@ -35,7 +36,7 @@ const LoginForm = ({ onSubmit, loading, error }) => {
           required
         />
       </div>
-      
+
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <FaLock className="text-gray-400" />
@@ -49,7 +50,21 @@ const LoginForm = ({ onSubmit, loading, error }) => {
           required
         />
       </div>
-      
+
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <FaPhone className="text-gray-400" />
+        </div>
+        <input
+          type="tel"
+          placeholder="Phone Number (for OTP)"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="w-full pl-10 pr-3 py-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          required
+        />
+      </div>
+
       <button
         type="submit"
         disabled={loading}
@@ -59,13 +74,11 @@ const LoginForm = ({ onSubmit, loading, error }) => {
       >
         {loading ? 'Signing In...' : 'Sign In'}
       </button>
-      
+
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-400">
           Don't have an account?{' '}
-          <a href="/signup" className="font-medium text-yellow-500 hover:text-yellow-400">
-            Sign up
-          </a>
+          <span className="font-medium text-yellow-500">Contact Admin</span>
         </p>
       </div>
     </form>

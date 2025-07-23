@@ -1,67 +1,32 @@
 import React, { useState } from 'react';
 
-const TradingPanel = ({ onExecuteTrade }) => {
-  const [symbol, setSymbol] = useState('');
-  const [amount, setAmount] = useState('');
-  const [tradeType, setTradeType] = useState('buy');
-  const [orderType, setOrderType] = useState('market');
+const TradingPanel = () => {
+  const [stock, setStock] = useState('RELIANCE');
+  const [amount, setAmount] = useState(50000);
+  const [risk, setRisk] = useState('Medium');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onExecuteTrade({ symbol, amount: parseFloat(amount), tradeType, orderType });
+  const handleTrade = (action) => {
+    alert(`Placed ${action} order for ${stock} at ₹${amount}`);
   };
 
   return (
-    <div className="trading-panel">
-      <h3>Trading Panel</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Symbol</label>
-          <input 
-            type="text" 
-            value={symbol} 
-            onChange={(e) => setSymbol(e.target.value.toUpperCase())} 
-            placeholder="e.g. BTC" 
-            required 
-          />
-        </div>
-        
-        <div className="form-group">
-          <label>Amount ($)</label>
-          <input 
-            type="number" 
-            value={amount} 
-            onChange={(e) => setAmount(e.target.value)} 
-            placeholder="0.00" 
-            min="0"
-            step="0.01"
-            required 
-          />
-        </div>
-        
-        <div className="form-row">
-          <div className="form-group">
-            <label>Type</label>
-            <select value={tradeType} onChange={(e) => setTradeType(e.target.value)}>
-              <option value="buy">Buy</option>
-              <option value="sell">Sell</option>
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label>Order Type</label>
-            <select value={orderType} onChange={(e) => setOrderType(e.target.value)}>
-              <option value="market">Market</option>
-              <option value="limit">Limit</option>
-              <option value="stop">Stop Loss</option>
-            </select>
+    <div className="card">
+      <div className="card-header">
+        <div className="card-title"><i className="fas fa-exchange-alt"></i> Trading Panel</div>
+      </div>
+      <div className="card-body">
+        <div className="trading-form">
+          {/* Form fields same as your HTML */}
+          <div className="btn-group">
+            <button className="btn-trade btn-buy" onClick={() => handleTrade('buy')}>
+              Buy
+            </button>
+            <button className="btn-trade btn-sell" onClick={() => handleTrade('sell')}>
+              Sell
+            </button>
           </div>
         </div>
-        
-        <button type="submit" className="trade-button">
-          {tradeType === 'buy' ? 'Buy' : 'Sell'} {symbol || 'Asset'}
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

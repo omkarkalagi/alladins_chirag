@@ -1,41 +1,29 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
+  
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      // In a real app, verify token with backend
-      setUser({ email: 'user@example.com' });
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
-    setLoading(false);
   }, []);
-
-  const login = async (userData) => {
-    localStorage.setItem('authToken', 'dummy-token');
+  
+  const login = (userData) => {
     setUser(userData);
-    navigate('/dashboard');
+    localStorage.setItem('user', JSON.stringify(userData));
   };
-
+  
   const logout = () => {
-    localStorage.removeItem('authToken');
     setUser(null);
-    navigate('/login');
+    localStorage.removeItem('user');
   };
-
+  
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading, 
-      login, 
-      logout 
-    }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

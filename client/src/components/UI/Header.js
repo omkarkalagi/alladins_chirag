@@ -1,45 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // updated path
 
-const Header = () => {
-  const { currentUser, logout } = useAuth();
+const Header = ({ user, logout }) => {
+  const getInitials = (name) => {
+    return name.split(' ').map(n => n[0]).join('');
+  };
 
   return (
-    <header className="app-header">
-      <div className="header-left">
-        <Link to="/" className="logo">
-          <span className="logo-icon">📊</span>
-          <span className="logo-text">TradeMaster</span>
-        </Link>
+    <div className="dashboard-header">
+      <div className="dashboard-brand">
+        <div className="dashboard-logo">
+          <i className="fas fa-gem"></i>
+        </div>
+        <div className="dashboard-name">Alladins Chirag</div>
       </div>
-      
-      <div className="header-center">
-        <nav>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/trading">Trading</Link>
-          <Link to="/portfolio">Portfolio</Link>
-          <Link to="/research">Research</Link>
-        </nav>
+      <div className="user-info">
+        <div className="user-avatar">{getInitials(user.name)}</div>
+        <div>
+          <div>{user.name}</div>
+          <div className="since">{user.accountType} Account</div>
+        </div>
+        <button className="logout-btn" onClick={logout}>
+          <i className="fas fa-sign-out-alt"></i> Logout
+        </button>
       </div>
-      
-      <div className="header-right">
-        {currentUser ? (
-          <>
-            <div className="user-info">
-              <span className="user-avatar">{currentUser.email.charAt(0).toUpperCase()}</span>
-              <span className="user-name">{currentUser.email}</span>
-            </div>
-            <button onClick={logout} className="logout-btn">Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" className="login-btn">Login</Link>
-            <Link to="/signup" className="signup-btn">Sign Up</Link>
-          </>
-        )}
-      </div>
-    </header>
+    </div>
   );
 };
 

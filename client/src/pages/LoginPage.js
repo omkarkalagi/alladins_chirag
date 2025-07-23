@@ -1,121 +1,107 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState(''); // email or mobile
   const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState('');
+  const [isOtpSent, setIsOtpSent] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleEmailLogin = async (e) => {
+  const isEmail = (val) => /\S+@\S+\.\S+/.test(val);
+  const isMobile = (val) => /^\d{10}$/.test(val);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post('/api/auth/login', { email, password });
-      if (res.data.success) {
-        setSuccessMessage('Login successful. Redirecting to dashboard...');
-        setTimeout(() => navigate('/dashboard'), 2000);
+    if (isEmail(identifier)) {
+      // Email login
+      try {
+        const res = await axios.post('/api/auth/login', { email: identifier, password });
+        if (res.data.success) {
+          setSuccessMessage('Login successful. Redirecting to dashboard...');
+          await login(res.data.user);
+          navigate('/dashboard');
+        } else {
+          alert('Invalid credentials');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Login error');
+      }
+    } else if (isMobile(identifier)) {
+      // Mobile login - send OTP or verify OTP
+      if (!isOtpSent) {
+        try {
+          const res = await axios.post('/api/auth/send-otp', { phone: identifier });
+          if (res.data.success) {
+            setIsOtpSent(true);
+            alert('OTP sent to your mobile number');
+          } else {
+            alert('Failed to send OTP');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Error sending OTP');
+        }
       } else {
-        alert('Invalid credentials');
+        // Verify OTP
+        try {
+          const res = await axios.post('/api/auth/verify-otp', { phone: identifier, otp });
+          if (res.data.success) {
+            setSuccessMessage('Login successful. Redirecting to dashboard...');
+            await login(res.data.user);
+            navigate('/dashboard');
+          } else {
+            alert('Invalid OTP');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('OTP verification error');
+        }
       }
-    } catch (err) {
-      console.error(err);
-      alert('Login error');
-    }
-  };
-
-  const sendOTP = async () => {
-    try {
-      const res = await axios.post('/api/auth/send-otp', { phone });
-      if (res.data.success) {
-        setOtpSent(true);
-        alert('OTP sent successfully');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Failed to send OTP');
-    }
-  };
-
-  const verifyOTP = async () => {
-    try {
-      const res = await axios.post('/api/auth/verify-otp', { phone, otp });
-      if (res.data.success) {
-        setSuccessMessage('OTP verified. Redirecting to dashboard...');
-        setTimeout(() => navigate('/dashboard'), 2000);
-      } else {
-        alert('Invalid OTP');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('OTP verification error');
+    } else {
+      alert('Please enter a valid email or 10-digit mobile number');
     }
   };
 
   return (
-    <div className="login-page flex flex-col items-center justify-center min-h-screen bg-black text-white p-4">
-      <div className="logo-container">
-        <img src="/assets/logo.svg" alt="Alladins Chirag Logo" className="h-20 mx-auto mb-2" />
-        <h2 className="text-2xl font-semibold">Welcome to Alladins Chirag</h2>
-      </div>
-
-      {successMessage && (
-        <div className="bg-green-600 px-4 py-2 rounded-lg mb-4">{successMessage}</div>
-      )}
-
-      <form onSubmit={handleEmailLogin} className="w-full max-w-sm space-y-4">
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
         <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          value={identifier}
+          onChange={e => setIdentifier(e.target.value)}
+          placeholder="Email or Mobile Number"
           required
         />
-        <input
-          type="password"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" className="btn-primary w-full">Login with Email</button>
-      </form>
-
-      <div className="my-4">OR</div>
-
-      <div className="otp-login w-full max-w-sm space-y-4">
-        {!otpSent ? (
-          <>
-            <input
-              type="tel"
-              placeholder="Enter phone number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-            <button onClick={sendOTP} className="btn-primary w-full">Send OTP</button>
-          </>
-        ) : (
-          <>
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              required
-            />
-            <button onClick={verifyOTP} className="btn-primary w-full">Verify OTP</button>
-          </>
+        {isEmail(identifier) && (
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
         )}
-      </div>
-
-      <div className="app-links mt-6">
-        <img src="/assets/google-play.png" alt="Get it on Google Play" className="h-10 inline mx-2" />
-        <img src="/assets/microsoft-store.png" alt="Get it from Microsoft Store" className="h-10 inline mx-2" />
-      </div>
+        {isMobile(identifier) && isOtpSent && (
+          <input
+            type="text"
+            value={otp}
+            onChange={e => setOtp(e.target.value)}
+            placeholder="Enter OTP"
+            required
+          />
+        )}
+        <button type="submit">
+          {isMobile(identifier) && !isOtpSent ? 'Send OTP' : 'Login'}
+        </button>
+      </form>
+      {successMessage && <p>{successMessage}</p>}
     </div>
   );
 };

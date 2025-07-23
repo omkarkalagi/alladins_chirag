@@ -1,30 +1,93 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import Chart from 'chart.js/auto';
 
-const Portfolio = ({ holdings }) => {
-  const totalValue = holdings.reduce((sum, item) => sum + item.value, 0);
+const Portfolio = () => {
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
   
-  return (
-    <div className="portfolio">
-      <h3>Your Portfolio</h3>
-      <div className="portfolio-summary">
-        <div className="total-value">${totalValue.toFixed(2)}</div>
-        <div className="performance">+2.3% today</div>
-      </div>
+  useEffect(() => {
+    if (chartRef.current) {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
       
-      <div className="holdings-list">
-        {holdings.map((holding, index) => (
-          <div className="holding-item" key={index}>
-            <div className="symbol">{holding.symbol}</div>
-            <div className="details">
-              <span>{holding.shares} shares</span>
-              <span>${holding.price.toFixed(2)}</span>
-            </div>
-            <div className={`value ${holding.change >= 0 ? 'positive' : 'negative'}`}>
-              ${holding.value.toFixed(2)}
-              <span>({holding.change.toFixed(2)}%)</span>
-            </div>
+      const ctx = chartRef.current.getContext('2d');
+      chartInstance.current = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+          datasets: [{
+            label: 'Portfolio Value (₹)',
+            data: [850000, 920000, 980000, 1050000, 1100000, 1170000, 1254870],
+            borderColor: '#405DE6',
+            backgroundColor: 'rgba(64, 93, 230, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              },
+              ticks: {
+                callback: function(value) {
+                  return '₹' + (value / 1000).toLocaleString() + 'K';
+                }
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+    };
+  }, []);
+
+  return (
+    <div className="card">
+      <div className="card-header">
+        <div className="card-title"><i className="fas fa-wallet"></i> Portfolio</div>
+        <div className="since">Today</div>
+      </div>
+      <div className="card-body">
+        <div className="chart-container">
+          <canvas ref={chartRef} id="portfolioChart"></canvas>
+        </div>
+        
+        <div className="portfolio-stats">
+          <div className="stat-card">
+            <h3>Total Value</h3>
+            <div className="value">₹1,254,870</div>
           </div>
-        ))}
+          <div className="stat-card">
+            <h3>Today's Gain</h3>
+            <div className="value positive">+₹24,650</div>
+          </div>
+          <div className="stat-card">
+            <h3>Overall Return</h3>
+            <div className="value positive">+18.45%</div>
+          </div>
+        </div>
       </div>
     </div>
   );

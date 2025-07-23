@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const LoginPage = () => {
   const [identifier, setIdentifier] = useState(''); // email or mobile
@@ -9,6 +10,7 @@ const LoginPage = () => {
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -17,54 +19,68 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
     if (isEmail(identifier)) {
       // Email login
       try {
-        const res = await axios.post('/api/auth/login', { email: identifier, password });
-        if (res.data.success) {
+        const res = await fetch(`${API_URL}/auth/login/email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: identifier, password }),
+        });
+        const data = await res.json();
+        if (data.success) {
           setSuccessMessage('Login successful. Redirecting to dashboard...');
-          await login(res.data.user);
+          await login({ email: identifier, password }, 'email');
           navigate('/dashboard');
         } else {
-          alert('Invalid credentials');
+          setErrorMessage(data.message || 'Invalid credentials');
         }
       } catch (err) {
-        console.error(err);
-        alert('Login error');
+        setErrorMessage('Login error');
       }
     } else if (isMobile(identifier)) {
       // Mobile login - send OTP or verify OTP
       if (!isOtpSent) {
         try {
-          const res = await axios.post('/api/auth/send-otp', { phone: identifier });
-          if (res.data.success) {
+          const res = await fetch(`${API_URL}/auth/otp/send`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobile: identifier }),
+          });
+          const data = await res.json();
+          if (data.success) {
             setIsOtpSent(true);
-            alert('OTP sent to your mobile number');
+            setSuccessMessage('OTP sent to your mobile number');
           } else {
-            alert('Failed to send OTP');
+            setErrorMessage(data.message || 'Failed to send OTP');
           }
         } catch (err) {
-          console.error(err);
-          alert('Error sending OTP');
+          setErrorMessage('Error sending OTP');
         }
       } else {
-        // Verify OTP
+        // Verify OTP and login
         try {
-          const res = await axios.post('/api/auth/verify-otp', { phone: identifier, otp });
-          if (res.data.success) {
+          const res = await fetch(`${API_URL}/auth/login/mobile`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobile: identifier, otp }),
+          });
+          const data = await res.json();
+          if (data.success) {
             setSuccessMessage('Login successful. Redirecting to dashboard...');
-            await login(res.data.user);
+            await login({ mobile: identifier, otp }, 'mobile');
             navigate('/dashboard');
           } else {
-            alert('Invalid OTP');
+            setErrorMessage(data.message || 'Invalid OTP');
           }
         } catch (err) {
-          console.error(err);
-          alert('OTP verification error');
+          setErrorMessage('OTP verification error');
         }
       }
     } else {
-      alert('Please enter a valid email or 10-digit mobile number');
+      setErrorMessage('Please enter a valid email or 10-digit mobile number');
     }
   };
 
@@ -101,7 +117,8 @@ const LoginPage = () => {
           {isMobile(identifier) && !isOtpSent ? 'Send OTP' : 'Login'}
         </button>
       </form>
-      {successMessage && <p>{successMessage}</p>}
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );
 };

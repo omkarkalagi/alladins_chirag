@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const otpService = require('../services/otpService');
 
 // Email/password login
 exports.loginWithEmail = async (req, res) => {
@@ -51,8 +52,11 @@ exports.sendOTP = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     user.otp = otp;
     await user.save();
-    // TODO: Integrate with SMS provider
-    console.log(`OTP for ${mobile}: ${otp}`);
+    try {
+      await otpService.sendOTPViaTwilio(mobile, otp);
+    } catch (twilioErr) {
+      return res.status(500).json({ success: false, message: 'Failed to send OTP via SMS.' });
+    }
     res.json({ success: true, message: 'OTP sent successfully' });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Failed to send OTP' });

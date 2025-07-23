@@ -55,11 +55,13 @@ exports.sendOTP = async (req, res) => {
     try {
       await otpService.sendOTPViaTwilio(mobile, otp);
     } catch (twilioErr) {
-      return res.status(500).json({ success: false, message: 'Failed to send OTP via SMS.' });
+      console.error('Twilio send error:', twilioErr);
+      return res.status(500).json({ success: false, message: 'Failed to send OTP via SMS.', error: twilioErr.message || twilioErr });
     }
     res.json({ success: true, message: 'OTP sent successfully' });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Failed to send OTP' });
+    console.error('OTP send error:', err);
+    res.status(500).json({ success: false, message: 'Failed to send OTP', error: err.message || err });
   }
 };
 

@@ -1,32 +1,41 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
+import * as authService from '../services/authService';
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const login = async (credentials, method = 'email') => {
+    let response;
+    if (method === 'email') {
+      response = await authService.loginWithEmail(credentials.email, credentials.password);
+    } else if (method === 'mobile') {
+      response = await authService.loginWithMobile(credentials.mobile, credentials.otp);
     }
-  }, []);
-  
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    if (response && response.success) {
+      setUser(response.user);
+      setIsAuthenticated(true);
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+    return response;
   };
-  
+
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    setIsAuthenticated(false);
   };
-  
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

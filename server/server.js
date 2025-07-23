@@ -6,6 +6,8 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const http = require('http');
+const setupWebsocket = require('./websocket');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -119,7 +121,9 @@ app.use((err, req, res, next) => {
 });
 
 // ✅ Server startup
-const server = app.listen(PORT, () => {
+const server = http.createServer(app);
+setupWebsocket(server);
+server.listen(PORT, () => {
   console.log('='.repeat(50));
   console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode`);
   console.log(`🌐 Listening on port ${PORT}`);

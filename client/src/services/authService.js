@@ -1,20 +1,47 @@
-import axios from 'axios';
+// authService.js
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-const api = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || '/api',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
+export const loginWithEmail = async (email, password) => {
+  const res = await fetch(`${API_URL}/auth/login/email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  return res.json();
+};
 
-export const loginUser = async (email, password) => {
-  try {
-    const response = await api.post('/auth/login', {
-      email,
-      password
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Authentication failed');
-  }
+export const loginWithMobile = async (mobile, otp) => {
+  const res = await fetch(`${API_URL}/auth/login/mobile`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mobile, otp }),
+  });
+  return res.json();
+};
+
+export const sendOTP = async (mobile) => {
+  const res = await fetch(`${API_URL}/auth/otp/send`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mobile }),
+  });
+  return res.json();
+};
+
+export const verifyOTP = async (mobile, otp) => {
+  const res = await fetch(`${API_URL}/auth/otp/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mobile, otp }),
+  });
+  return res.json();
+};
+
+export const register = async (email, password, mobile) => {
+  const res = await fetch(`${API_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password, mobile }),
+  });
+  return res.json();
 };

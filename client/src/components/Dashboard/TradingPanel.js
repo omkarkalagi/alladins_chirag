@@ -1,32 +1,57 @@
 import React, { useState } from 'react';
+import { executeTrade } from '../../services/stockService';
 
 const TradingPanel = () => {
-  const [stock, setStock] = useState('RELIANCE');
-  const [amount, setAmount] = useState(50000);
-  const [risk, setRisk] = useState('Medium');
+  const [form, setForm] = useState({ symbol: '', quantity: '', type: 'buy' });
+  const [message, setMessage] = useState('');
 
-  const handleTrade = (action) => {
-    alert(`Placed ${action} order for ${stock} at ₹${amount}`);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage('');
+    try {
+      const response = await executeTrade(form);
+      if (response && response.message) {
+        setMessage(response.message);
+      } else {
+        setMessage('Order placed!');
+      }
+    } catch (err) {
+      setMessage('Order failed.');
+    }
+    setForm({ symbol: '', quantity: '', type: 'buy' });
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <div className="card-title"><i className="fas fa-exchange-alt"></i> Trading Panel</div>
-      </div>
-      <div className="card-body">
-        <div className="trading-form">
-          {/* Form fields same as your HTML */}
-          <div className="btn-group">
-            <button className="btn-trade btn-buy" onClick={() => handleTrade('buy')}>
-              Buy
-            </button>
-            <button className="btn-trade btn-sell" onClick={() => handleTrade('sell')}>
-              Sell
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="trading-panel card">
+      <h2>Trading Panel</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="symbol"
+          placeholder="Stock Symbol"
+          value={form.symbol}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="number"
+          name="quantity"
+          placeholder="Quantity"
+          value={form.quantity}
+          onChange={handleChange}
+          required
+        />
+        <select name="type" value={form.type} onChange={handleChange}>
+          <option value="buy">Buy</option>
+          <option value="sell">Sell</option>
+        </select>
+        <button type="submit">Place Order</button>
+      </form>
+      {message && <div className="trade-message">{message}</div>}
     </div>
   );
 };

@@ -2,6 +2,7 @@
 const User = require('../models/User');
 const axios = require('axios');
 const { KITE_API_KEY } = process.env;
+const kiteService = require('../services/brokerage/kiteService');
 
 // Get market data
 exports.getMarketData = async (req, res) => {
@@ -120,5 +121,60 @@ exports.getPortfolio = async (req, res) => {
       message: 'Failed to fetch portfolio',
       error: err.message 
     });
+  }
+};
+
+exports.getKiteLoginURL = (req, res) => {
+  try {
+    const url = kiteService.getLoginURL();
+    res.json({ url });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to get login URL' });
+  }
+};
+
+exports.generateKiteSession = async (req, res) => {
+  try {
+    const { requestToken } = req.body;
+    const session = await kiteService.generateSession(requestToken);
+    res.json(session);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to generate session' });
+  }
+};
+
+exports.getMarketQuotes = async (req, res) => {
+  try {
+    const { symbols } = req.body;
+    const quotes = await kiteService.getQuotes(symbols);
+    res.json(quotes);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch quotes' });
+  }
+};
+
+exports.placeOrder = async (req, res) => {
+  try {
+    const orderParams = req.body;
+    // TODO: Implement order placement
+    await kiteService.placeOrder(orderParams);
+    res.json({ message: 'Order placed (placeholder)' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to place order' });
+  }
+};
+
+exports.kiteCallback = async (req, res) => {
+  const { request_token, status } = req.query;
+  if (!request_token || status !== 'success') {
+    return res.status(400).send('Kite login failed or cancelled.');
+  }
+  try {
+    const session = await require('../services/brokerage/kiteService').generateSession(request_token);
+    // You may want to store session info in DB or session here
+    // For now, just show a success message
+    res.send('Kite login successful! You can close this window and return to the app.');
+  } catch (err) {
+    res.status(500).send('Failed to generate Kite session.');
   }
 };

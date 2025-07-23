@@ -52,13 +52,8 @@ exports.sendOTP = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     user.otp = otp;
     await user.save();
-    try {
-      await otpService.sendOTPViaTwilio(mobile, otp);
-    } catch (twilioErr) {
-      console.error('Twilio send error:', twilioErr);
-      return res.status(500).json({ success: false, message: 'Failed to send OTP via SMS.', error: twilioErr.message || twilioErr });
-    }
-    res.json({ success: true, message: 'OTP sent successfully' });
+    // For development/demo: return OTP in response (no SMS)
+    res.json({ success: true, message: 'OTP sent successfully (dev mode)', otp });
   } catch (err) {
     console.error('OTP send error:', err);
     res.status(500).json({ success: false, message: 'Failed to send OTP', error: err.message || err });

@@ -3,60 +3,42 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const otpService = require('../services/otpService');
 
-// Email/password login
+// Email/password login (hardcoded)
 exports.loginWithEmail = async (req, res) => {
   const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user || !user.password) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    res.json({ success: true, token, user: { id: user._id, email: user.email } });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Server error' });
+  if (email === 'omkardigambar4@gmail.com' && password === 'omkar') {
+    // Return dummy user and token
+    return res.json({
+      success: true,
+      token: 'dummy-token',
+      user: { id: '1', email }
+    });
+  } else {
+    return res.status(401).json({ success: false, message: 'Invalid credentials' });
   }
 };
 
-// Mobile/OTP login
+// Mobile/OTP login (hardcoded)
 exports.loginWithMobile = async (req, res) => {
   const { mobile, otp } = req.body;
-  try {
-    const user = await User.findOne({ mobile });
-    if (!user || user.otp !== otp) {
-      return res.status(401).json({ success: false, message: 'Invalid OTP' });
-    }
-    user.isVerified = true;
-    user.otp = null;
-    await user.save();
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    res.json({ success: true, token, user: { id: user._id, mobile: user.mobile } });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Server error' });
+  if ((mobile === '7624828106' || mobile === '+917624828106') && otp === '7624') {
+    return res.json({
+      success: true,
+      token: 'dummy-token',
+      user: { id: '2', mobile }
+    });
+  } else {
+    return res.status(401).json({ success: false, message: 'Invalid OTP' });
   }
 };
 
-// Send OTP
+// Send OTP (always return 7624 for dev/demo)
 exports.sendOTP = async (req, res) => {
   const { mobile } = req.body;
-  try {
-    let user = await User.findOne({ mobile });
-    if (!user) {
-      user = new User({ mobile });
-    }
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    user.otp = otp;
-    await user.save();
-    // For development/demo: return OTP in response (no SMS)
-    res.json({ success: true, message: 'OTP sent successfully (dev mode)', otp });
-  } catch (err) {
-    console.error('OTP send error:', err);
-    res.status(500).json({ success: false, message: 'Failed to send OTP', error: err.message || err });
+  if (mobile === '7624828106' || mobile === '+917624828106') {
+    return res.json({ success: true, message: 'OTP sent successfully (dev mode)', otp: '7624' });
+  } else {
+    return res.status(400).json({ success: false, message: 'Only 7624828106 is allowed for demo.' });
   }
 };
 

@@ -9,7 +9,7 @@
     "deploy": "vercel --prod"
   },
   "engines": {
-    "node": ">=18.x"
+    "node": "22.x"
   },
   "dependencies": {
     "axios": "^1.10.0",
@@ -22,7 +22,8 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "kiteconnect": "^5.0.1",
-    "mongoose": "^7.8.7",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.16.4",
     "serverless-http": "^3.2.0",
     "stripe": "^13.11.0",
     "twilio": "^5.7.3"

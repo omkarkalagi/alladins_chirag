@@ -33,23 +33,23 @@ const LoginPage = () => {
       return;
     }
     try {
-      console.log('Sending email login:', trimmedEmail, trimmedPassword);
       const res = await fetch(`${API_URL}/auth/login/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
       });
       const data = await res.json();
-      console.log('Email login response:', data);
       if (data.success) {
         setSuccessMessage('Login successful. Redirecting to dashboard...');
         await login({ email: trimmedEmail, password: trimmedPassword }, 'email');
-        window.location.href = '/dashboard';
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 500);
       } else {
         setErrorMessage(data.message || 'Invalid credentials');
       }
     } catch (err) {
-      setErrorMessage('Login error');
+      setErrorMessage('Login error. Please try again.');
     }
   };
 
@@ -67,14 +67,12 @@ const LoginPage = () => {
       return;
     }
     try {
-      console.log('Sending OTP to:', VERIFIED_E164);
       const res = await fetch(`${API_URL}/auth/otp/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: VERIFIED_E164 }),
       });
       const data = await res.json();
-      console.log('Send OTP response:', data);
       if (data.success) {
         setIsOtpSent(true);
         setSuccessMessage(`OTP sent! (For demo, use OTP: ${data.otp})`);
@@ -82,7 +80,7 @@ const LoginPage = () => {
         setErrorMessage(data.message || 'Failed to send OTP');
       }
     } catch (err) {
-      setErrorMessage('Error sending OTP');
+      setErrorMessage('Error sending OTP. Please try again.');
     }
   };
 
@@ -101,23 +99,23 @@ const LoginPage = () => {
       return;
     }
     try {
-      console.log('Sending OTP login:', VERIFIED_E164, trimmedOtp);
       const res = await fetch(`${API_URL}/auth/login/mobile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: VERIFIED_E164, otp: trimmedOtp }),
       });
       const data = await res.json();
-      console.log('OTP login response:', data);
       if (data.success) {
         setSuccessMessage('Login successful. Redirecting to dashboard...');
         await login({ mobile: VERIFIED_E164, otp: trimmedOtp }, 'mobile');
-        window.location.href = '/dashboard';
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 500);
       } else {
         setErrorMessage(data.message || 'Invalid OTP');
       }
     } catch (err) {
-      setErrorMessage('OTP verification error');
+      setErrorMessage('OTP verification error. Please try again.');
     }
   };
 

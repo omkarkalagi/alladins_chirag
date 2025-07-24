@@ -6,12 +6,14 @@ const otpService = require('../services/otpService');
 // Email/password login (hardcoded)
 exports.loginWithEmail = async (req, res) => {
   const { email, password } = req.body;
-  if (email === 'omkardigambar4@gmail.com' && password === 'omkar') {
-    // Return dummy user and token
+  const trimmedEmail = (email || '').trim();
+  const trimmedPassword = (password || '').trim();
+  console.log('Email login attempt:', trimmedEmail, trimmedPassword);
+  if (trimmedEmail === 'omkardigambar4@gmail.com' && trimmedPassword === 'omkar') {
     return res.json({
       success: true,
       token: 'dummy-token',
-      user: { id: '1', email }
+      user: { id: '1', email: trimmedEmail }
     });
   } else {
     return res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -21,11 +23,14 @@ exports.loginWithEmail = async (req, res) => {
 // Mobile/OTP login (hardcoded)
 exports.loginWithMobile = async (req, res) => {
   const { mobile, otp } = req.body;
-  if ((mobile === '7624828106' || mobile === '+917624828106') && otp === '7624') {
+  const trimmedMobile = (mobile || '').replace(/\D/g, '').slice(-10);
+  const trimmedOtp = (otp || '').trim();
+  console.log('Mobile login attempt:', trimmedMobile, trimmedOtp);
+  if ((trimmedMobile === '7624828106' || mobile === '+917624828106') && trimmedOtp === '7624') {
     return res.json({
       success: true,
       token: 'dummy-token',
-      user: { id: '2', mobile }
+      user: { id: '2', mobile: trimmedMobile }
     });
   } else {
     return res.status(401).json({ success: false, message: 'Invalid OTP' });
@@ -35,7 +40,9 @@ exports.loginWithMobile = async (req, res) => {
 // Send OTP (always return 7624 for dev/demo)
 exports.sendOTP = async (req, res) => {
   const { mobile } = req.body;
-  if (mobile === '7624828106' || mobile === '+917624828106') {
+  const trimmedMobile = (mobile || '').replace(/\D/g, '').slice(-10);
+  console.log('Send OTP attempt:', trimmedMobile);
+  if (trimmedMobile === '7624828106') {
     return res.json({ success: true, message: 'OTP sent successfully (dev mode)', otp: '7624' });
   } else {
     return res.status(400).json({ success: false, message: 'Only 7624828106 is allowed for demo.' });

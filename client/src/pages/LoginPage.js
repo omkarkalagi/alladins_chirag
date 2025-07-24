@@ -22,24 +22,28 @@ const LoginPage = () => {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
-    if (!isEmail(email)) {
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    if (!isEmail(trimmedEmail)) {
       setErrorMessage('Please enter a valid email.');
       return;
     }
-    if (!password) {
+    if (!trimmedPassword) {
       setErrorMessage('Please enter your password.');
       return;
     }
     try {
+      console.log('Sending email login:', trimmedEmail, trimmedPassword);
       const res = await fetch(`${API_URL}/auth/login/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
       });
       const data = await res.json();
+      console.log('Email login response:', data);
       if (data.success) {
         setSuccessMessage('Login successful. Redirecting to dashboard...');
-        await login({ email, password }, 'email');
+        await login({ email: trimmedEmail, password: trimmedPassword }, 'email');
         window.location.href = '/dashboard';
       } else {
         setErrorMessage(data.message || 'Invalid credentials');
@@ -53,21 +57,24 @@ const LoginPage = () => {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
-    if (!isMobile(mobile)) {
+    const trimmedMobile = mobile.trim();
+    if (!isMobile(trimmedMobile)) {
       setErrorMessage('Please enter a valid 10-digit mobile number.');
       return;
     }
-    if (mobile !== VERIFIED_NUMBER) {
+    if (trimmedMobile !== VERIFIED_NUMBER) {
       setErrorMessage('For demo, OTP can only be sent to your verified number: 7624828106');
       return;
     }
     try {
+      console.log('Sending OTP to:', VERIFIED_E164);
       const res = await fetch(`${API_URL}/auth/otp/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: VERIFIED_E164 }),
       });
       const data = await res.json();
+      console.log('Send OTP response:', data);
       if (data.success) {
         setIsOtpSent(true);
         setSuccessMessage(`OTP sent! (For demo, use OTP: ${data.otp})`);
@@ -83,24 +90,28 @@ const LoginPage = () => {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
-    if (!isMobile(mobile)) {
+    const trimmedMobile = mobile.trim();
+    const trimmedOtp = otp.trim();
+    if (!isMobile(trimmedMobile)) {
       setErrorMessage('Please enter a valid 10-digit mobile number.');
       return;
     }
-    if (!otp) {
+    if (!trimmedOtp) {
       setErrorMessage('Please enter the OTP.');
       return;
     }
     try {
+      console.log('Sending OTP login:', VERIFIED_E164, trimmedOtp);
       const res = await fetch(`${API_URL}/auth/login/mobile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile: VERIFIED_E164, otp }),
+        body: JSON.stringify({ mobile: VERIFIED_E164, otp: trimmedOtp }),
       });
       const data = await res.json();
+      console.log('OTP login response:', data);
       if (data.success) {
         setSuccessMessage('Login successful. Redirecting to dashboard...');
-        await login({ mobile: VERIFIED_E164, otp }, 'mobile');
+        await login({ mobile: VERIFIED_E164, otp: trimmedOtp }, 'mobile');
         window.location.href = '/dashboard';
       } else {
         setErrorMessage(data.message || 'Invalid OTP');
@@ -126,7 +137,7 @@ const LoginPage = () => {
             <span style={{ background: '#f0f0f0', padding: '12px 10px', borderRadius: '7px 0 0 7px', border: '1px solid #ddd', borderRight: 'none', color: '#405DE6', fontWeight: 600 }}>+91</span>
             <input type="text" value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-digit Mobile Number" className="auth-input" style={{ borderRadius: '0 7px 7px 0', marginBottom: 0, borderLeft: 'none' }} maxLength={10} minLength={10} required />
           </div>
-          {isOtpSent && (
+          {(isOtpSent || successMessage.includes('OTP sent')) && (
             <input type="text" value={otp} onChange={e => setOtp(e.target.value)} placeholder="Enter OTP" className="auth-input" required />
           )}
           <button type="submit" className="auth-btn">{isOtpSent ? 'Login with OTP' : 'Send OTP'}</button>
